@@ -1,0 +1,36 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>复刻 13 · 看板娘对话气泡（占位版）</title>
+<style>
+:root{--bg:#f5efe0;--ink:#2b2b2b;--cinnabar:#c0392b}
+*{margin:0;padding:0;box-sizing:border-box}
+body{height:100vh;background:linear-gradient(180deg,#efe7d4,var(--bg));font-family:"Noto Serif SC","SimSun",serif;overflow:hidden;position:relative}
+.badge{position:fixed;top:14px;right:16px;font-size:12px;color:#fff;background:rgba(43,43,43,.75);padding:6px 12px;border-radius:3px;z-index:9}
+.badge a{color:#f0c987;text-decoration:none}
+.girl{position:fixed;right:6vw;bottom:0;width:190px;text-align:center;z-index:3}
+.avatar{width:150px;height:210px;margin:0 auto;background:linear-gradient(180deg,#dfe7f2,#c6d2e4);
+ border-radius:75px 75px 22px 22px;position:relative;box-shadow:0 10px 30px rgba(43,43,43,.18);animation:bob 3.4s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+.avatar::before{content:"";position:absolute;top:34px;left:50%;transform:translateX(-50%);width:60px;height:60px;border-radius:50%;
+ background:radial-gradient(circle at 35% 35%,#f7f4ee,#e3ded2)}
+.face{position:absolute;top:56px;left:50%;transform:translateX(-50%);font-size:30px;letter-spacing:16px;padding-left:16px;color:#2b2b2b}
+.name{margin-top:8px;font-size:14px;color:#6b6552;letter-spacing:.3em}
+.bubble{position:fixed;right:calc(6vw + 200px);bottom:150px;max-width:340px;background:#fff;border:1.5px solid var(--ink);
+ border-radius:14px;padding:16px 18px;font-size:15px;line-height:1.9;color:var(--ink);box-shadow:4px 4px 0 rgba(43,43,43,.15);
+ animation:pop .4s cubic-bezier(.2,1.4,.4,1)}
+@keyframes pop{from{opacity:0;transform:translateY(14px) scale(.92)}}
+.bubble::after{content:"";position:absolute;right:-10px;bottom:26px;border:10px solid transparent;border-left-color:var(--ink)}
+.bubble b{color:var(--cinnabar)}
+</style></head><body>
+<div class="badge">复刻 13 · 出处：<a href="https://reverie365.github.io/poetry-visualization/" target="_blank">砚池云览（内置 live2d 资源）</a> · 此为轻量占位版</div>
+<div class="bubble" id="bb">观星台已开，<b>司天监</b>在此。今日宜观北斗，忌闭门造车。客官欲问何星？</div>
+<div class="girl">
+ <div class="avatar"><div class="face">·　·</div></div>
+ <div class="name">AI 司天监 · 占位立绘</div>
+</div>
+<script>
+// 要点：正式版把 .avatar 换成 live2d 模型（砚池云览 public/live2d 有现成资源），
+// 气泡文案由大模型驱动，间隔轮换保持"活着"的感觉
+const T=['北斗之柄东指，天下皆春。','荧惑守心非吉，然火星车已驻乌托邦。','今日月离于毕，滂沱将至——记得带伞。'];
+let i=0;setInterval(()=>{const b=document.getElementById('bb');i=(i+1)%T.length;
+ b.style.animation='none';void b.offsetWidth;b.style.animation='';b.innerHTML=T[i].replace(/(北斗|荧惑|月离于毕)/,'<b>$1</b>');},4200);
+</script></body></html>
