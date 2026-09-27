@@ -1,0 +1,39 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>复刻 09 · 飘落花瓣粒子</title>
+<style>
+:root{--paper:#f5efe0}
+*{margin:0;padding:0}
+body{height:100vh;overflow:hidden;background:linear-gradient(160deg,#efe7d4,#f5efe0);font-family:"Noto Serif SC","SimSun",serif}
+.badge{position:fixed;top:14px;right:16px;z-index:9;font-size:12px;color:#fff;background:rgba(43,43,43,.75);border:1px solid rgba(192,57,43,.6);padding:6px 12px;border-radius:3px;font-family:system-ui}
+.badge a{color:#f0c987;text-decoration:none}
+canvas{position:fixed;inset:0}
+.t{position:absolute;top:38%;width:100%;text-align:center;font-size:clamp(30px,5vw,58px);font-weight:900;letter-spacing:.3em;color:#3d3a33;z-index:2}
+.s{position:absolute;top:56%;width:100%;text-align:center;font-size:15px;letter-spacing:.4em;color:#8a8271;z-index:2}
+</style></head><body>
+<div class="badge">复刻 09 · 出处：<a href="https://reverie365.github.io/poetry-visualization/" target="_blank">砚池云览·飘落花瓣</a></div>
+<canvas id="c"></canvas>
+<div class="t">观 乎 天 文</div><div class="s">飘 花 不 扫 · 落 英 缤 纷</div>
+<script>
+// 要点：花瓣=椭圆旋转 + 三段摆动下落；数量按屏宽自适应
+const c=document.getElementById('c'),x=c.getContext('2d');
+let W,H;const P=[];
+const rnd=Math.random.bind(Math);
+function size(){W=c.width=innerWidth;H=c.height=innerHeight;
+ if(!P.length)for(let i=0;i<Math.min(60,W/16);i++)P.push(newP(true));}
+function newP(init){return{x:rnd()*W,y:init?rnd()*H:-30,s:4+rnd()*5,a:rnd()*6.28,va:(rnd()-.5)*.05,
+ vy:.4+rnd()*.9,sw:20+rnd()*40,ph:rnd()*6.28,o:.5+rnd()*.5};}
+function draw(t){
+ x.clearRect(0,0,W,H);
+ for(let i=0;i<P.length;i++){const p=P[i];
+  p.y+=p.vy;p.a+=p.va;p.x+=Math.sin(t/1400+p.ph)*.6;
+  if(p.y>H+30)P[i]=newP();
+  x.save();x.translate(p.x,p.y);x.rotate(p.a);
+  x.fillStyle=`rgba(228,160,170,${p.o})`;
+  x.beginPath();x.ellipse(0,0,p.s,p.s*.55,0,0,6.29);x.fill();
+  x.fillStyle=`rgba(255,235,238,${p.o*.7})`;
+  x.beginPath();x.ellipse(-p.s*.3,-p.s*.2,p.s*.5,p.s*.28,0,0,6.29);x.fill();
+  x.restore();}
+ requestAnimationFrame(draw);
+}
+size();addEventListener('resize',size);requestAnimationFrame(draw);
+</script></body></html>
