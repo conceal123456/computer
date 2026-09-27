@@ -1,0 +1,44 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>复刻 25 · 功能走查·左文右图版式</title>
+<style>
+:root{--bg:#070b14;--panel:rgba(17,25,44,.66);--line:rgba(216,180,90,.28);--gold:#d8b45a;--text:#ece5d3;--dim:#9aa3b5}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:"Noto Serif SC","SimSun",serif;padding:56px 6vw}
+.badge{position:fixed;top:14px;right:16px;font-size:12px;color:var(--gold);background:rgba(11,17,32,.9);border:1px solid var(--line);padding:6px 12px;border-radius:3px}
+.badge a{color:#57b98a;text-decoration:none}
+.row{display:grid;grid-template-columns:1fr 1.25fr;gap:44px;align-items:center;margin-top:36px}
+.row:nth-child(even){direction:rtl}
+.row>*{direction:ltr}
+.step{font-family:Georgia,serif;font-size:15px;color:var(--gold);letter-spacing:.3em}
+h2{font-size:clamp(24px,3vw,34px);letter-spacing:.12em;margin:10px 0 16px}
+p{font-size:15px;line-height:2;color:var(--dim);max-width:480px}
+ul{margin:16px 0 0;padding-left:20px;font-size:14px;color:var(--dim);line-height:2}
+ul b{color:var(--gold)}
+.shot{aspect-ratio:16/10;border:1px solid var(--line);border-radius:8px;background:
+ linear-gradient(135deg,rgba(91,143,201,.14),rgba(216,180,90,.08)),var(--panel);
+ display:grid;place-items:center;position:relative;overflow:hidden}
+.shot::after{content:"正式版替换为系统截图";position:absolute;bottom:12px;right:14px;font-size:11px;color:#6f7a8f;letter-spacing:.2em}
+.mock{width:78%;height:70%;border:1px solid rgba(216,180,90,.35);border-radius:6px;background:rgba(7,11,20,.6);padding:12px}
+.mock i{display:block;height:9px;border-radius:3px;background:rgba(216,180,90,.5);margin:8px 0}
+.mock i:nth-child(1){width:44%}.mock i:nth-child(2){width:82%;opacity:.4}.mock i:nth-child(3){width:66%;opacity:.4}.mock i:nth-child(4){width:74%;opacity:.4}
+@media(max-width:900px){.row{grid-template-columns:1fr}}
+</style></head><body>
+<div class="badge">复刻 25 · 出处：<a href="https://www.bilibili.com/video/BV1SM4y1e73B/" target="_blank">《药寻》功能走查版式（22.7万播放）</a></div>
+<div class="row">
+ <div>
+  <div class="step">STEP 01</div>
+  <h2>一屏只讲一件事</h2>
+  <p>左文右图的定式：左边步骤号+标题+两行价值说明，右边放系统实拍。评委视线永远知道往哪看。</p>
+  <ul><li>标题里带<b>动词</b>（选背景 / 定角度 / 生成视频）</li><li>正文不超过两行，多余信息进列表</li></ul>
+ </div>
+ <div class="shot"><div class="mock"><i></i><i></i><i></i><i></i></div></div>
+</div>
+<div class="row">
+ <div>
+  <div class="step">STEP 02</div>
+  <h2>偶数行镜像翻转</h2>
+  <p>下一屏文字换到右侧，形成 Z 字视线动线——演示视频 3 分钟不闷的秘诀。</p>
+ </div>
+ <div class="shot"><div class="mock"><i></i><i></i><i></i><i></i></div></div>
+</div>
+</body></html>
