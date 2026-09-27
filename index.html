@@ -1,0 +1,39 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>复刻 08 · 水墨山峦开场页</title>
+<style>
+:root{--paper:#f5efe0;--ink:#2b2b2b;--cinnabar:#c0392b}
+*{margin:0;padding:0;box-sizing:border-box}
+body{height:100vh;overflow:hidden;background:linear-gradient(180deg,#e8e0cd,#f5efe0 45%,#ece4d0);font-family:"Noto Serif SC","STZhongsong","SimSun",serif;position:relative}
+.badge{position:fixed;top:14px;right:16px;font-size:12px;color:#fff;background:rgba(43,43,43,.75);border:1px solid rgba(192,57,43,.6);padding:6px 12px;border-radius:3px}
+.badge a{color:#f0c987;text-decoration:none}
+/* 三层山：远山淡、近山浓，SVG path 自绘（替代砚池云览的版权插画） */
+.layer{position:absolute;left:0;right:0;bottom:0;pointer-events:none}
+.l3{opacity:.28;animation:drift 26s ease-in-out infinite alternate}
+.l2{opacity:.5;animation:drift 18s ease-in-out infinite alternate-reverse}
+.l1{opacity:.9}
+@keyframes drift{from{transform:translateX(0)}to{transform:translateX(-40px)}}
+.mist{position:absolute;left:0;right:0;bottom:26%;height:22%;background:linear-gradient(180deg,transparent,rgba(245,239,224,.85),transparent)}
+.hero{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:2}
+h1{font-size:clamp(56px,9vw,110px);font-weight:900;letter-spacing:.22em;color:var(--ink);text-shadow:0 2px 0 rgba(255,255,255,.6)}
+h1 em{font-style:normal;color:var(--cinnabar)}
+.sub{margin-top:16px;font-size:16px;letter-spacing:.5em;color:#6b6552}
+.seal{margin-top:30px;width:64px;height:64px;background:var(--cinnabar);color:#f5efe0;display:grid;place-items:center;
+ font-size:20px;line-height:1.15;border-radius:6px;box-shadow:0 4px 14px rgba(192,57,43,.4);transform:rotate(-3deg)}
+.bird{position:absolute;z-index:2;font-size:22px;color:#55504a;animation:fly 14s linear infinite}
+@keyframes fly{from{transform:translate(-8vw,10vh) scale(.8)}50%{transform:translate(45vw,-6vh)}to{transform:translate(108vw,8vh) scale(.8)}}
+</style></head><body>
+<div class="badge">复刻 08 · 出处：<a href="https://reverie365.github.io/poetry-visualization/" target="_blank">砚池云览·开场页</a> · 山峦以 SVG 自绘替代版权插画</div>
+<div class="hero">
+ <h1>观乎<em>天文</em></h1>
+ <div class="sub">以 察 时 变 · 敬 授 人 时</div>
+ <div class="seal">天文<br>之印</div>
+</div>
+<div class="bird">𓅮</div><div class="bird" style="animation-delay:-7s">𓅮</div>
+<div class="mist"></div>
+<svg class="layer l3" viewBox="0 0 1440 300" preserveAspectRatio="none" style="height:34vh">
+ <path d="M0,300 L0,180 Q180,80 360,170 T720,140 T1080,180 T1440,120 L1440,300 Z" fill="#8d86a3"/></svg>
+<svg class="layer l2" viewBox="0 0 1440 300" preserveAspectRatio="none" style="height:26vh">
+ <path d="M0,300 L0,210 Q240,110 480,200 T900,170 T1440,210 L1440,300 Z" fill="#6f7d6b"/></svg>
+<svg class="layer l1" viewBox="0 0 1440 300" preserveAspectRatio="none" style="height:18vh">
+ <path d="M0,300 L0,250 Q300,160 560,240 T1000,225 T1440,255 L1440,300 Z" fill="#4c5245"/></svg>
+</body></html>
