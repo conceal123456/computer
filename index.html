@@ -1,0 +1,39 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>复刻 23 · 演示片头定调版式</title>
+<style>
+:root{--bg:#070b14;--gold:#d8b45a;--cinnabar:#c8503c;--text:#ece5d3}
+*{margin:0;padding:0;box-sizing:border-box}
+body{height:100vh;overflow:hidden;background:var(--bg);font-family:"Noto Serif SC","SimSun",serif;position:relative}
+.badge{position:fixed;top:14px;right:16px;font-size:12px;color:var(--gold);background:rgba(11,17,32,.9);border:1px solid rgba(216,180,90,.28);padding:6px 12px;border-radius:3px;z-index:9}
+.badge a{color:#57b98a;text-decoration:none}
+canvas{position:fixed;inset:0}
+.hero{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:2;text-align:center}
+.eyebrow{font-size:13px;letter-spacing:.6em;color:#9aa3b5;opacity:0;animation:in .8s .2s forwards}
+h1{font-size:clamp(48px,8vw,96px);font-weight:900;letter-spacing:.18em;color:var(--text);margin:18px 0 8px;
+ opacity:0;animation:in 1s .6s forwards}
+h1 b{color:var(--gold);font-weight:900}
+.claim{font-size:16px;letter-spacing:.3em;color:var(--gold);opacity:0;animation:in .9s 1.2s forwards}
+.team{margin-top:52px;font-size:13px;color:#9aa3b5;letter-spacing:.35em;line-height:2.2;opacity:0;animation:in 1s 1.7s forwards}
+.bar{margin-top:34px;width:min(420px,70vw);height:3px;background:rgba(216,180,90,.18);border-radius:2px;overflow:hidden;opacity:0;animation:in .6s 2s forwards}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--cinnabar),var(--gold));animation:load 5s linear 2.1s forwards}
+@keyframes in{from{opacity:0;transform:translateY(20px);filter:blur(5px)}to{opacity:1;transform:none;filter:none}}
+@keyframes load{to{width:100%}}
+</style></head><body>
+<div class="badge">复刻 23 · 出处：<a href="https://www.bilibili.com/video/BV1SM4y1e73B/" target="_blank">《药寻》等国奖演示片头的通行结构</a></div>
+<canvas id="c"></canvas>
+<div class="hero">
+ <div class="eyebrow">中 国 大 学 生 计 算 机 设 计 大 赛 · 信 息 可 视 化 设 计</div>
+ <h1>观乎<b>天文</b></h1>
+ <div class="claim">从二十八宿到中国空间站的千年对话</div>
+ <div class="team">XX 大学 · 观星台团队<br>前端 / 数据 / AI 三线协作 · 2026</div>
+ <div class="bar"><i></i></div>
+</div>
+<script>
+// 简版星空背景（完整版见 demo 主文件）
+const c=document.getElementById('c'),x=c.getContext('2d');
+function size(){c.width=innerWidth;c.height=innerHeight}size();addEventListener('resize',size);
+const S=Array.from({length:160},()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,r:Math.random()*1.5+.3,p:Math.random()*6.28}));
+(function f(t){x.clearRect(0,0,c.width,c.height);
+ S.forEach(s=>{x.beginPath();x.arc(s.x,s.y,s.r,0,6.29);x.fillStyle=`rgba(216,180,90,${.2+.6*Math.abs(Math.sin(t/900+s.p))})`;x.fill();});
+ requestAnimationFrame(f)})(0);
+</script></body></html>
