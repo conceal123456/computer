@@ -1,0 +1,51 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>复刻 30 · AI 对话窗（打字机 + 快捷签筹）</title>
+<style>
+:root{--bg:#070b14;--panel:rgba(17,25,44,.66);--line:rgba(216,180,90,.28);--gold:#d8b45a;--cinnabar:#c8503c;--text:#ece5d3;--dim:#9aa3b5;--qing:#57b98a}
+*{margin:0;padding:0;box-sizing:border-box}
+body{min-height:100vh;display:grid;place-items:center;background:radial-gradient(800px 400px at 50% 0%,rgba(91,143,201,.12),transparent 60%),var(--bg);
+ font-family:"Noto Serif SC","SimSun",serif;padding:40px 3vw}
+.badge{position:fixed;top:14px;right:16px;font-size:12px;color:var(--gold);background:rgba(11,17,32,.9);border:1px solid var(--line);padding:6px 12px;border-radius:3px;z-index:9}
+.badge a{color:#57b98a;text-decoration:none}
+.chat{width:min(660px,94vw);height:min(640px,86vh);display:flex;flex-direction:column;border:1px solid var(--line);border-radius:10px;background:var(--panel);backdrop-filter:blur(8px);overflow:hidden}
+.head{display:flex;align-items:center;gap:12px;padding:15px 20px;border-bottom:1px solid var(--line)}
+.head .av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--cinnabar),var(--gold));display:grid;place-items:center;font-size:17px}
+.head b{letter-spacing:.2em}
+.head .st{margin-left:auto;font-size:11px;color:var(--qing);border:1px solid rgba(87,185,138,.4);padding:3px 10px;border-radius:10px;letter-spacing:.15em}
+.body{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:13px}
+.msg{max-width:84%;padding:12px 16px;border-radius:10px;font-size:14.5px;line-height:1.9}
+.msg.user{align-self:flex-end;background:rgba(200,80,60,.16);border:1px solid rgba(200,80,60,.35);border-bottom-right-radius:3px}
+.msg.bot{align-self:flex-start;background:rgba(216,180,90,.07);border:1px solid var(--line);border-bottom-left-radius:3px}
+.msg.bot b{color:var(--gold)}
+.chips{display:flex;gap:9px;flex-wrap:wrap;padding:10px 18px}
+.chip{cursor:pointer;font-size:12.5px;color:var(--gold);border:1px solid var(--line);background:none;font-family:inherit;padding:6px 13px;border-radius:16px}
+.chip:hover{background:rgba(216,180,90,.12)}
+.inp{display:flex;gap:10px;padding:14px 18px;border-top:1px solid var(--line)}
+.inp input{flex:1;background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:8px;color:var(--text);font-family:inherit;font-size:14px;padding:11px 15px;outline:none}
+.inp button{background:var(--gold);border:none;border-radius:8px;padding:0 22px;font-family:inherit;font-size:14px;color:#1a1408;cursor:pointer}
+.caret{display:inline-block;width:2px;height:16px;background:var(--gold);vertical-align:-3px;animation:bk .8s steps(1) infinite}
+@keyframes bk{50%{opacity:0}}
+</style></head><body>
+<div class="badge">复刻 30 · 出处：<a href="https://github.com/Reverie365/poetry-visualization" target="_blank">砚池云览大模型对话（proxy 转发）+ 观乎天文</a></div>
+<div class="chat">
+ <div class="head"><div class="av">监</div><b>AI 司天监</b><span class="st">离线演示 · 预留 API</span></div>
+ <div class="body" id="bd"><div class="msg bot">下官司天监。客官可点签筹提问，或输入自拟问题。</div></div>
+ <div class="chips" id="ch"></div>
+ <div class="inp"><input id="ipt" placeholder="问点星宿的事…（回车发送）"><button>敬呈</button></div>
+</div>
+<script>
+const QA={'为什么叫北斗？':'古人以<b>斗柄指时</b>——柄东指而天下皆春。北斗是夜空最易辨认的"天然路标"，导航系统袭其名，即是告诉世人：这是中国人架在天上的路标。',
+ '二十八宿怎么排？':'沿黄道把周天分<b>二十八段</b>，四象各领七宿：东方苍龙、北方玄武、西方白虎、南方朱雀。它既是分区，也是一部随天运转的历法。',
+ '还有哪些命名彩蛋？':'鹊桥通月背、悟空寻暗物质、墨子发量子——<b>两千年前的想象，正在变成工程清单</b>。'};
+const bd=document.getElementById('bd'),ch=document.getElementById('ch');
+function add(cls,html,typing){const m=document.createElement('div');m.className='msg '+cls;bd.appendChild(m);
+ if(!typing){m.innerHTML=html;bd.scrollTop=bd.scrollHeight;return}
+ let i=0;const iv=setInterval(()=>{m.innerHTML=html.slice(0,i+=2)+'<span class="caret"></span>';bd.scrollTop=bd.scrollHeight;
+  if(i>=html.length){m.innerHTML=html;clearInterval(iv)}},22);}
+Object.keys(QA).forEach(k=>{const c=document.createElement('button');c.className='chip';c.textContent=k;
+ c.onclick=()=>{add('user',k);setTimeout(()=>add('bot',QA[k],true),380)};ch.appendChild(c);});
+document.querySelector('.inp button').onclick=send;document.getElementById('ipt').addEventListener('keydown',e=>{if(e.key==='Enter')send()});
+function send(){const v=document.getElementById('ipt').value.trim();if(!v)return;
+ add('user',v);document.getElementById('ipt').value='';
+ setTimeout(()=>add('bot','此问需接入大模型 API 方能详答——见 <b>README · 分工线③</b>。',true),380);}
+</script></body></html>
