@@ -1,0 +1,60 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>复刻 21 · 2D ↔ 3D 星图联动</title>
+<style>
+:root{--bg:#070b14;--gold:#d8b45a;--text:#ece5d3;--cinnabar:#c8503c}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:"Noto Serif SC","SimSun",serif;padding:56px 4vw}
+.badge{position:fixed;top:14px;right:16px;font-size:12px;color:var(--gold);background:rgba(11,17,32,.9);border:1px solid rgba(216,180,90,.28);padding:6px 12px;border-radius:3px;z-index:9}
+.badge a{color:#57b98a;text-decoration:none}
+h2{text-align:center;letter-spacing:.25em;font-size:24px}
+.panels{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:24px}
+.pane{border:1px solid rgba(216,180,90,.28);border-radius:6px;background:rgba(17,25,44,.66);padding:14px;text-align:center}
+.pane h3{font-size:14px;color:#9aa3b5;letter-spacing:.3em;margin-bottom:10px}
+canvas{width:100%;height:340px;background:#0b1120;border-radius:4px;cursor:pointer}
+.sel{margin-top:20px;text-align:center;font-size:16px;letter-spacing:.2em}
+.sel b{color:var(--gold)}
+@media(max-width:900px){.panels{grid-template-columns:1fr}}
+</style></head><body>
+<div class="badge">复刻 21 · 出处：<a href="https://github.com/3502687683-web/zhuyun-heritage" target="_blank">筑韵千年联动思路 + 观乎天文双星图</a></div>
+<h2>点 2D · 3D 同 步 亮 起</h2>
+<div class="panels">
+ <div class="pane"><h3>2D 星图（点击宿名）</h3><canvas id="c2"></canvas></div>
+ <div class="pane"><h3>3D 天球（自动对准）</h3><canvas id="c3"></canvas></div>
+</div>
+<div class="sel">当前选中：<b id="cur">心</b> —— 两视图共享同一份状态，正式版把 3D 侧做成自动转向</div>
+<script src="three.min.js"></script>
+<script src="OrbitControls.js"></script>
+<script>
+const SEL=['角','亢','氐','房','心','尾','箕'];
+const POS=[.12,.25,.38,.5,.62,.75,.88]; // 2D 横向位置
+let active=2;
+// --- 2D ---
+const c2=document.getElementById('c2'),x2=c2.getContext('2d');
+function d2(){const W=c2.clientWidth,H=c2.clientHeight;c2.width=W;c2.height=H;
+ x2.fillStyle='rgba(180,195,220,.5)';for(let i=0;i<70;i++){x2.beginPath();x2.arc((i*127)%W,(i*211)%H,1,0,6.29);x2.fill();}
+ SEL.forEach((n,i)=>{const X=POS[i]*W,Y=H/2,on=i===active;
+  x2.beginPath();x2.arc(X,Y,on?8:5,0,6.29);x2.fillStyle=on?'#d8b45a':'rgba(236,229,211,.55)';x2.fill();
+  if(on){x2.beginPath();x2.arc(X,Y,15,0,6.29);x2.strokeStyle='rgba(200,80,60,.9)';x2.lineWidth=2;x2.stroke();}
+  x2.font=(on?'700 19px':'15px')+' "Noto Serif SC","SimSun",serif';x2.textAlign='center';
+  x2.fillStyle=on?'#ece5d3':'#9aa3b5';x2.fillText(n,X,Y-22);});}
+c2.onclick=e=>{const r=c2.getBoundingClientRect();const X=(e.clientX-r.left);
+ let best=0,bd=1e9;POS.forEach((p,i)=>{const d=Math.abs(p*r.width-X);if(d<bd){bd=d;best=i}});active=best;sync();};
+// --- 3D ---
+const c3=document.getElementById('c3');
+const r3=new THREE.WebGLRenderer({canvas:c3,antialias:true,alpha:true});
+const s3=new THREE.Scene(),cam3=new THREE.PerspectiveCamera(45,1,.1,100);cam3.position.set(0,2,13);
+const controls=new THREE.OrbitControls(cam3,r3.domElement);controls.enableDamping=true;controls.enablePan=false;
+const R=9,group=new THREE.Group();s3.add(group);
+const dots=[];
+SEL.forEach((n,i)=>{const a=POS[i]/1*Math.PI*2-2.4,d=.12;
+ const m=new THREE.Mesh(new THREE.SphereGeometry(.3,12,12),
+  new THREE.MeshBasicMaterial({color:0xd8b45a}));
+ m.position.set(R*Math.cos(d)*Math.cos(a),R*Math.sin(d),-R*Math.cos(d)*Math.sin(a));group.add(m);dots.push(m);});
+function d3(){const W=c3.clientWidth,H=c3.clientHeight;
+ if(c3.width!==W||c3.height!==H){r3.setSize(W,H);cam3.aspect=W/H;cam3.updateProjectionMatrix();}
+ dots.forEach((m,i)=>{m.material.color.set(i===active?0xe05747:0xd8b45a);
+  m.scale.setScalar(i===active?1.6:1);});
+ group.rotation.y+=.002;controls.update();r3.render(s3,cam3);}
+function sync(){document.getElementById('cur').textContent=SEL[active];d2();}
+(function loop(){d2();d3();requestAnimationFrame(loop)})();
+</script></body></html>
