@@ -1,0 +1,44 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>复刻 17 · 3D 悬浮标签（billboard）</title>
+<style>
+:root{--bg:#070b14;--gold:#d8b45a;--text:#ece5d3}
+*{margin:0;padding:0}
+body{margin:0;height:100vh;overflow:hidden;background:var(--bg);font-family:"Noto Serif SC","SimSun",serif}
+.badge{position:fixed;top:14px;right:16px;font-size:12px;color:var(--gold);background:rgba(11,17,32,.9);border:1px solid rgba(216,180,90,.28);padding:6px 12px;border-radius:3px;z-index:9}
+.badge a{color:#57b98a;text-decoration:none}
+#box{position:fixed;inset:0}
+.t{position:fixed;top:44px;width:100%;text-align:center;font-size:26px;letter-spacing:.4em;color:var(--text);z-index:2;pointer-events:none}
+.s{position:fixed;top:92px;width:100%;text-align:center;font-size:12.5px;color:#9aa3b5;letter-spacing:.25em;z-index:2;pointer-events:none}
+</style></head><body>
+<div class="badge">复刻 17 · 出处：<a href="https://github.com/3502687683-web/zhuyun-heritage" target="_blank">筑韵千年 3D 屏标注方案 + 观乎天文·天球</a></div>
+<div class="t">星 皆 有 名</div><div class="s">要点：canvas 文字 → CanvasTexture → Sprite；depthTest:false 保证标签永远可见</div>
+<div id="box"></div>
+<script src="three.min.js"></script>
+<script>
+const W=innerWidth,H=innerHeight;
+const r=new THREE.WebGLRenderer({antialias:true,alpha:true});r.setSize(W,H);document.getElementById('box').appendChild(r.domElement);
+const s=new THREE.Scene(),cam=new THREE.PerspectiveCamera(45,W/H,.1,100);cam.position.set(0,2,13);
+const controls=new THREE.OrbitControls(cam,r.domElement);controls.autoRotate=true;controls.autoRotateSpeed=.5;controls.enableDamping=true;
+function label(txt,sub,color){const c=document.createElement('canvas');c.width=256;c.height=120;
+ const x=c.getContext('2d');x.textAlign='center';
+ x.font='700 46px "Noto Serif SC","SimSun",serif';x.fillStyle=color;x.fillText(txt,128,52);
+ x.font='24px "Noto Serif SC","SimSun",serif';x.fillStyle='rgba(236,229,211,.75)';x.fillText(sub,128,92);
+ const t=new THREE.CanvasTexture(c);t.minFilter=THREE.LinearFilter;
+ const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:t,transparent:true,depthTest:false}));
+ sp.scale.set(2.4,1.15,1);return sp;}
+// 三颗"名星"（示意位置）
+const STARS=[['织女一','Vega · 天琴','#e05747',2.2,3],['河鼓二','牛郎 · 天鹰','#57b98a',-2.4,-1],['北落师门','Fomalhaut · 南鱼','#5b8fc9',.5,-3.5]];
+STARS.forEach(([n,sub,c,x,y])=>{
+ const star=new THREE.Mesh(new THREE.SphereGeometry(.28,16,16),new THREE.MeshBasicMaterial({color:new THREE.Color(c)}));
+ star.position.set(x,y,0);s.add(star);
+ const halo=new THREE.Mesh(new THREE.SphereGeometry(.44,16,16),
+  new THREE.MeshBasicMaterial({color:new THREE.Color(c),transparent:true,opacity:.25}));
+ halo.position.copy(star.position);s.add(halo);
+ const lb=label(n,sub,c);lb.position.set(x,y+.95,0);s.add(lb);});
+// 星座连线装饰
+const arr=new Float32Array(400*3);for(let i=0;i<400;i++){const v=new THREE.Vector3().randomDirection().multiplyScalar(26);arr[i*3]=v.x;arr[i*3+1]=v.y;arr[i*3+2]=v.z;}
+const bg=new THREE.BufferGeometry();bg.setAttribute('position',new THREE.BufferAttribute(arr,3));
+s.add(new THREE.Points(bg,new THREE.PointsMaterial({color:0xb4c3dc,size:.05})));
+addEventListener('resize',()=>{r.setSize(innerWidth,innerHeight);cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();});
+(function f(){controls.update();r.render(s,cam);requestAnimationFrame(f)})();
+</script></body></html>
