@@ -1,0 +1,44 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>复刻 15 · 3D 粒子银河旋臂</title>
+<style>
+:root{--bg:#070b14;--gold:#d8b45a;--text:#ece5d3}
+*{margin:0;padding:0}
+body{margin:0;height:100vh;overflow:hidden;background:#04060d;font-family:"Noto Serif SC","SimSun",serif}
+.badge{position:fixed;top:14px;right:16px;font-size:12px;color:var(--gold);background:rgba(11,17,32,.9);border:1px solid rgba(216,180,90,.28);padding:6px 12px;border-radius:3px;z-index:9}
+.badge a{color:#57b98a;text-decoration:none}
+#box{position:fixed;inset:0}
+.t{position:fixed;top:44px;width:100%;text-align:center;font-size:26px;letter-spacing:.4em;color:var(--text);z-index:2;pointer-events:none}
+.s{position:fixed;top:92px;width:100%;text-align:center;font-size:12.5px;color:#9aa3b5;letter-spacing:.25em;z-index:2;pointer-events:none}
+</style></head><body>
+<div class="badge">复刻 15 · 出处：<a href="https://github.com/3502687683-web/zhuyun-heritage" target="_blank">筑韵千年 three.min.js 用法</a> · 旋臂算法为通用银河粒子法</div>
+<div class="t">银 河 · 旋 臂</div><div class="s">要点：对数螺旋分布 + 双臂 + 中心辉光，两万粒子不到百行</div>
+<div id="box"></div>
+<script src="three.min.js"></script>
+<script src="OrbitControls.js"></script>
+<script>
+const W=innerWidth,H=innerHeight;
+const r=new THREE.WebGLRenderer({antialias:true,alpha:true});r.setSize(W,H);document.getElementById('box').appendChild(r.domElement);
+const s=new THREE.Scene(),cam=new THREE.PerspectiveCamera(50,W/H,.1,200);cam.position.set(0,7,10);
+const controls=new THREE.OrbitControls(cam,r.domElement);controls.autoRotate=true;controls.autoRotateSpeed=.4;controls.enableDamping=true;
+const N=20000,pos=new Float32Array(N*3),col=new Float32Array(N*3);
+const cIn=new THREE.Color('#ffe6b0'),cMid=new THREE.Color('#d8b45a'),cOut=new THREE.Color('#5b8fc9');
+for(let i=0;i<N;i++){
+ const arm=i%2, t=Math.pow(Math.random(),1.7);           // 半径分布：内密外疏
+ const rad=t*9+.35;
+ const angle=arm*Math.PI + t*4.2 + (Math.random()-.5)*(.9-t*.7);  // 对数螺旋 + 张角弥散
+ const x=Math.cos(angle)*rad+(Math.random()-.5)*.5;
+ const z=Math.sin(angle)*rad+(Math.random()-.5)*.5;
+ const y=(Math.random()-.5)*(1.6-t);
+ pos[i*3]=x;pos[i*3+1]=y;pos[i*3+2]=z;
+ const c=cIn.clone().lerp(cMid,t).lerp(cOut,Math.max(0,t-.5)*2);
+ col[i*3]=c.r;col[i*3+1]=c.g;col[i*3+2]=c.b;}
+const g=new THREE.BufferGeometry();
+g.setAttribute('position',new THREE.BufferAttribute(pos,3));
+g.setAttribute('color',new THREE.BufferAttribute(col,3));
+s.add(new THREE.Points(g,new THREE.PointsMaterial({size:.035,vertexColors:true,transparent:true,opacity:.9})));
+// 中心辉光
+const glow=new THREE.Mesh(new THREE.SphereGeometry(.7,24,24),new THREE.MeshBasicMaterial({color:0xffe6b0,transparent:true,opacity:.85}));
+s.add(glow);
+addEventListener('resize',()=>{r.setSize(innerWidth,innerHeight);cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();});
+(function f(){s.rotation.y+=.0009;controls.update();r.render(s,cam);requestAnimationFrame(f)})();
+</script></body></html>
