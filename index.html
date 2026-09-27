@@ -1,0 +1,36 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>复刻 01 · 统计卡组·数字滚动+出处标签</title>
+<style>
+:root{--bg:#070b14;--panel:rgba(17,25,44,.66);--line:rgba(216,180,90,.28);--gold:#d8b45a;--cinnabar:#c8503c;--text:#ece5d3;--dim:#9aa3b5;--qing:#57b98a}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:"Noto Serif SC","STZhongsong","SimSun",serif;padding:60px 5vw;font-size:15px}
+.badge{position:fixed;top:14px;right:16px;z-index:9;font-size:12px;color:var(--gold);background:rgba(11,17,32,.9);border:1px solid var(--line);padding:6px 12px;border-radius:3px;letter-spacing:.1em}
+.badge a{color:var(--qing);text-decoration:none}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:10px}
+.card{border:1px solid var(--line);border-radius:6px;background:var(--panel);padding:20px 22px;transition:transform .3s}
+.card:hover{transform:translateY(-4px)}
+.row{display:flex;align-items:center;gap:8px}
+.name{font-size:14px;color:var(--dim)}
+.pill{font-size:10.5px;color:var(--qing);border:1px solid rgba(87,185,138,.45);padding:1px 8px;border-radius:2px;letter-spacing:.1em}
+.num{font-size:38px;font-weight:900;color:var(--gold);margin:8px 0 4px;font-family:Georgia,var(--serif)}
+.sub{font-size:12px;color:var(--dim)}
+@media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
+</style></head><body>
+<div class="badge">复刻 01 · 出处：<a href="https://github.com/3502687683-web/zhuyun-heritage" target="_blank">筑韵千年·古建总览屏</a> · 数字为示意</div>
+<h2 style="letter-spacing:.15em">数据统计卡组 <span style="color:var(--gold);font-size:13px">要点：大数字 Georgia 衬线 + 出处 pill + hover 抬升</span></h2>
+<div class="grid" id="g"></div>
+<script>
+// 要点：rAF ease-out 数字滚动；出处标签是评委核查数据的第一触点
+const D=[
+ {n:'全国重点文物保护单位',v:5058,sub:'截至 2019-10 · 国务院八批（公开统计）'},
+ {n:'三普 · 古建筑类',v:263885,sub:'不可移动文物 766,722 处（公开统计）'},
+ {n:'本库分析样本',v:43026,sub:'国保 + 省保筛选（数字示意）'},
+ {n:'跨区域谱系关联',v:1266,sub:'构件级关系对（数字示意）'}];
+const g=document.getElementById('g');
+D.forEach(d=>{const el=document.createElement('div');el.className='card';
+ el.innerHTML=`<div class="row"><span class="name">${d.n}</span><span class="pill">${d.sub.includes('示意')?'数字示意':'公开统计'}</span></div>
+ <div class="num">0</div><div class="sub">${d.sub}</div>`;g.appendChild(el);
+ const numEl=el.querySelector('.num'),t0=performance.now();
+ (function f(now){const p=Math.min(1,(now-t0)/1400);numEl.textContent=Math.round(d.v*(1-Math.pow(1-p,3))).toLocaleString();
+   if(p<1)requestAnimationFrame(f)})(t0);});
+</script></body></html>
