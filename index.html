@@ -1,0 +1,30 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>复刻 02 · 环形占比组（纯 CSS conic-gradient）</title>
+<style>
+:root{--bg:#070b14;--panel:rgba(17,25,44,.66);--line:rgba(216,180,90,.28);--gold:#d8b45a;--text:#ece5d3;--dim:#9aa3b5}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:"Noto Serif SC","SimSun",serif;padding:60px 5vw}
+.badge{position:fixed;top:14px;right:16px;font-size:12px;color:var(--gold);background:rgba(11,17,32,.9);border:1px solid var(--line);padding:6px 12px;border-radius:3px}
+.badge a{color:#57b98a;text-decoration:none}
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:18px;margin-top:24px}
+.ring{width:130px;height:130px;border-radius:50%;margin:0 auto;position:relative;display:grid;place-items:center;
+ background:conic-gradient(var(--c) calc(var(--p)*1%),rgba(255,255,255,.07) 0)}
+.ring::after{content:"";position:absolute;inset:14px;border-radius:50%;background:var(--bg)}
+.pct{position:relative;z-index:1;font-size:26px;font-weight:900;color:var(--gold);font-family:Georgia,serif}
+.cap{text-align:center;margin-top:12px;font-size:14px}
+.sub{text-align:center;font-size:12px;color:var(--dim)}
+@media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
+</style></head><body>
+<div class="badge">复刻 02 · 出处：<a href="https://github.com/3502687683-web/zhuyun-heritage" target="_blank">筑韵千年·样本占比卡</a> · 占比为示意</div>
+<h2 style="letter-spacing:.15em">环形占比组 <span style="color:var(--gold);font-size:13px">要点：conic-gradient 一个 div 画环，零图表库开销</span></h2>
+<div class="grid" id="g"></div>
+<script>
+const D=[['民居',62,'#57b98a'],['桥梁',18,'#d8b45a'],['官府',8,'#e05747'],['皇宫',2,'#5b8fc9'],['祠堂等',10,'#9c8549']];
+const g=document.getElementById('g');
+D.forEach(([n,p,c],i)=>{const el=document.createElement('div');
+ el.innerHTML=`<div class="ring" style="--p:0;--c:${c}"><span class="pct">0%</span></div><div class="cap">${n}</div><div class="sub">${(p*430.26|0).toLocaleString()} 处（示意）</div>`;
+ g.appendChild(el);
+ const ring=el.querySelector('.ring'),pct=el.querySelector('.pct'),t0=performance.now();
+ (function f(now){const k=Math.min(1,(now-t0)/1100),v=p*(1-Math.pow(1-k,3));
+   ring.style.setProperty('--p',v);pct.textContent=Math.round(v)+'%';if(k<1)requestAnimationFrame(f)})(t0);});
+</script></body></html>
