@@ -1,0 +1,28 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>复刻 03 · ECharts 累计面积「河流图」</title>
+<style>
+:root{--bg:#070b14;--panel:rgba(17,25,44,.66);--line:rgba(216,180,90,.28);--gold:#d8b45a;--text:#ece5d3}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:"Noto Serif SC","SimSun",serif;padding:60px 5vw}
+.badge{position:fixed;top:14px;right:16px;font-size:12px;color:var(--gold);background:rgba(11,17,32,.9);border:1px solid var(--line);padding:6px 12px;border-radius:3px}
+.badge a{color:#57b98a;text-decoration:none}
+.card{border:1px solid var(--line);border-radius:6px;background:var(--panel);padding:18px;margin-top:20px}
+#chart{width:100%;height:480px}
+.cap{font-size:13px;color:#9aa3b5;margin-top:8px}
+</style></head><body>
+<div class="badge">复刻 03 · 出处：<a href="https://github.com/3502687683-web/zhuyun-heritage" target="_blank">筑韵千年·国保累计河流图</a> · 数据为示意</div>
+<h2 style="letter-spacing:.15em">ECharts 渐变面积图 <span style="color:var(--gold);font-size:13px">要点：LinearGradient 填充 + 暗色轴线 + 平滑曲线</span></h2>
+<div class="card"><div id="chart"></div><div class="cap">示意：历年全国重点文物保护单位累计公布数量（正式版逐条附引用）</div></div>
+<script src="echarts.min.js"></script>
+<script>
+echarts.init(document.getElementById('chart')).setOption({
+ backgroundColor:'transparent',tooltip:{trigger:'axis',backgroundColor:'rgba(11,17,32,.94)',borderColor:'rgba(216,180,90,.4)',textStyle:{color:'#ece5d3'}},
+ grid:{left:56,right:30,top:30,bottom:36},
+ xAxis:{type:'category',boundaryGap:false,data:['1961','1982','1988','1996','2001','2006','2013','2019'],
+  axisLine:{lineStyle:{color:'rgba(154,163,181,.45)'}},axisLabel:{color:'#9aa3b5'}},
+ yAxis:{type:'value',axisLabel:{color:'#9aa3b5'},splitLine:{lineStyle:{color:'rgba(154,163,181,.14)'}}},
+ series:[{type:'line',smooth:true,data:[180,242,500,750,963,1081,2352,5058],symbol:'circle',symbolSize:7,
+  lineStyle:{width:3,color:'#d8b45a'},itemStyle:{color:'#d8b45a'},
+  areaStyle:{color:new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'rgba(216,180,90,.42)'},{offset:1,color:'rgba(216,180,90,0)'}])},
+  label:{show:true,color:'#d8b45a',fontFamily:'serif'}}]});
+</script></body></html>
