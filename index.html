@@ -1,0 +1,43 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>复刻 24 · 章节转场字卡</title>
+<style>
+:root{--bg:#0a0806;--gold:#d8b45a;--text:#ece5d3}
+*{margin:0;padding:0;box-sizing:border-box}
+body{height:100vh;overflow:hidden;background:var(--bg);font-family:"Noto Serif SC","SimSun",serif;cursor:pointer}
+.badge{position:fixed;top:14px;right:16px;font-size:12px;color:var(--gold);background:rgba(11,17,32,.9);border:1px solid rgba(216,180,90,.28);padding:6px 12px;border-radius:3px;z-index:9}
+.badge a{color:#57b98a;text-decoration:none}
+.card{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px}
+.no{font-family:Georgia,serif;font-size:20px;color:var(--gold);letter-spacing:.5em;opacity:0}
+.t{font-size:clamp(44px,7vw,86px);font-weight:900;letter-spacing:.3em;color:var(--text);
+ background:linear-gradient(90deg,var(--gold) 0 50%,var(--text) 50%);-webkit-background-clip:text;background-clip:text;
+ -webkit-text-fill-color:transparent;opacity:0}
+.sub{font-size:14px;letter-spacing:.4em;color:#9aa3b5;opacity:0}
+.wipe{position:fixed;top:0;bottom:0;width:100%;background:linear-gradient(90deg,transparent,rgba(216,180,90,.16),transparent);
+ transform:translateX(-100%);}
+.play .no{animation:fin .7s .1s forwards}
+.play .t{animation:in .9s .35s forwards}
+.play .sub{animation:fin .8s .9s forwards}
+.play .wipe{animation:wipe 1.1s .2s ease-in-out}
+@keyframes in{from{opacity:0;letter-spacing:.6em;filter:blur(8px)}to{opacity:1;letter-spacing:.3em;filter:none}}
+@keyframes fin{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes wipe{from{transform:translateX(-100%)}50%{transform:translateX(0)}to{transform:translateX(100%)}}
+.hint{position:fixed;bottom:26px;width:100%;text-align:center;font-size:12.5px;color:#6f7a8f;letter-spacing:.4em}
+</style></head><body>
+<div class="badge">复刻 24 · 出处：<a href="https://www.bilibili.com/video/BV17u4y1Q7o7/" target="_blank">智慧课堂等国一演示的章节转场</a></div>
+<div class="card play" id="card">
+ <div class="no">CHAPTER 02</div>
+ <div class="t">古 名 今 用</div>
+ <div class="sub">写 进 航 天 器 的 星 官 神 话</div>
+</div>
+<div class="hint">点击任意处 · 重播转场</div>
+<script>
+const CH=[['CHAPTER 02','古 名 今 用','写 进 航 天 器 的 星 官 神 话'],
+ ['CHAPTER 03','四 千 年','从 观 象 授 时 到 巡 天 问 宇'],
+ ['CHAPTER 04','数 说 巡 天','用 公 开 数 据 检 验 星 空 叙 事']];
+let i=0;
+document.body.onclick=()=>{i=(i+1)%CH.length;const c=document.getElementById('card');
+ c.classList.remove('play');void c.offsetWidth;
+ const [no,t,sub]=CH[i];
+ c.querySelector('.no').textContent=no;c.querySelector('.t').textContent=t;c.querySelector('.sub').textContent=sub;
+ c.classList.add('play');};
+</script></body></html>
