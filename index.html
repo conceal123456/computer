@@ -1,0 +1,51 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>复刻 20 · 星宿连线·苍龙成形</title>
+<style>
+:root{--bg:#070b14;--gold:#d8b45a;--text:#ece5d3;--qing:#57b98a}
+*{margin:0;padding:0}
+body{margin:0;height:100vh;overflow:hidden;background:radial-gradient(1000px 500px at 50% 100%,rgba(87,185,138,.1),transparent 65%),var(--bg);font-family:"Noto Serif SC","SimSun",serif}
+.badge{position:fixed;top:14px;right:16px;font-size:12px;color:var(--gold);background:rgba(11,17,32,.9);border:1px solid rgba(216,180,90,.28);padding:6px 12px;border-radius:3px;z-index:9}
+.badge a{color:#57b98a;text-decoration:none}
+canvas{position:fixed;inset:0}
+.t{position:fixed;top:40px;width:100%;text-align:center;font-size:26px;letter-spacing:.4em;color:var(--text);z-index:2;pointer-events:none}
+.s{position:fixed;top:88px;width:100%;text-align:center;font-size:12.5px;color:#9aa3b5;letter-spacing:.25em;z-index:2;pointer-events:none}
+.tip{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);font-size:14px;color:var(--qing);letter-spacing:.2em;z-index:2;
+ background:rgba(11,17,32,.85);border:1px solid rgba(87,185,138,.4);padding:9px 20px;border-radius:20px}
+</style></head><body>
+<div class="badge">复刻 20 · 出处：<a href="https://github.com/qianyu0415/arnc" target="_blank">古韵新章·星宿玩法 + 观乎天文</a> · 连线为示意象形</div>
+<canvas id="c"></canvas>
+<div class="t">东 方 苍 龙 · 七 宿 成 形</div>
+<div class="s">要点：星点按宿位排布，逐段"生长"连线——动画感是叙事的关键</div>
+<div class="tip" id="tip">角 → 亢 → 氐 → 房 → 心 → 尾 → 箕</div>
+<script>
+const c=document.getElementById('c'),x=c.getContext('2d');
+let W,H;const rr=Math.random.bind(Math);
+function size(){W=c.width=innerWidth;H=c.height=innerHeight;}size();addEventListener('resize',size);
+// 七宿位置（示意象形：龙头→龙尾扬起）
+const XI=[[.18,.62,'角'],[.28,.5,'亢'],[.38,.58,'氐'],[.48,.46,'房'],[.58,.52,'心'],[.68,.38,'尾'],[.8,.3,'箕']];
+let t0=null;
+function draw(now){
+ if(t0===null)t0=now;const t=(now-t0)/1000;
+ x.clearRect(0,0,W,H);
+ // 底星
+ for(let i=0;i<120;i++){const a=.15+.4*Math.abs(Math.sin(t+i));
+  x.beginPath();x.arc((rr()*W+i*97)%W,(rr()*H+i*57)%H,1.1,0,6.29);x.fillStyle=`rgba(180,195,220,${a})`;x.fill();}
+ const px=p=>[p[0]*W,p[1]*H];
+ // 连线：按时间逐段生长（每段 0.6s，间隔 0.35s）
+ x.lineCap='round';
+ for(let i=0;i<6;i++){
+  const seg=Math.min(1,Math.max(0,(t-1-i*.35)/.6));if(seg<=0)break;
+  const [x1,y1]=px(XI[i]),[x2,y2]=px(XI[i+1]);
+  x.strokeStyle='rgba(87,185,138,.85)';x.lineWidth=2.4;
+  x.beginPath();x.moveTo(x1,y1);x.lineTo(x1+(x2-x1)*seg,y1+(y2-y1)*seg);x.stroke();}
+ // 星点+宿名
+ XI.forEach(([rx,ry,n],i)=>{
+  const [pxx,pyy]=px([rx,ry]);const born=t>.4+i*.35;
+  const pu=1+Math.sin(t*2+i)*.15;
+  x.beginPath();x.arc(pxx,pyy,5.5*pu,0,6.29);x.fillStyle=born?'#d8b45a':'rgba(216,180,90,.25)';x.fill();
+  x.beginPath();x.arc(pxx,pyy,11*pu,0,6.29);x.strokeStyle='rgba(216,180,90,.35)';x.stroke();
+  x.font='700 17px "Noto Serif SC","SimSun",serif';x.textAlign='center';x.fillStyle='#ece5d3';
+  x.fillText(n,pxx,pyy-18);});
+ requestAnimationFrame(draw);}
+requestAnimationFrame(draw);
+</script></body></html>
