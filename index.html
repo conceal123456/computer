@@ -1,0 +1,32 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>复刻 27 · 片尾致谢 + 二维码占位</title>
+<style>
+:root{--bg:#070b14;--gold:#d8b45a;--cinnabar:#c8503c;--text:#ece5d3}
+*{margin:0;padding:0;box-sizing:border-box}
+body{height:100vh;overflow:hidden;background:radial-gradient(900px 460px at 50% 110%,rgba(200,80,60,.14),transparent 60%),var(--bg);
+ font-family:"Noto Serif SC","SimSun",serif;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;text-align:center}
+.badge{position:fixed;top:14px;right:16px;font-size:12px;color:var(--gold);background:rgba(11,17,32,.9);border:1px solid rgba(216,180,90,.28);padding:6px 12px;border-radius:3px;z-index:9}
+.badge a{color:#57b98a;text-decoration:none}
+h1{font-size:clamp(40px,6vw,72px);font-weight:900;letter-spacing:.3em;color:var(--text);
+ opacity:0;animation:in 1s .2s forwards}
+h1 b{color:var(--gold)}
+.thanks{margin-top:18px;font-size:14px;letter-spacing:.4em;color:#9aa3b5;opacity:0;animation:in 1s .7s forwards}
+.cards{display:flex;gap:26px;margin-top:46px;opacity:0;animation:in 1s 1.1s forwards}
+.qr{width:150px;padding:14px;border:1px solid rgba(216,180,90,.35);border-radius:8px;background:rgba(17,25,44,.66)}
+.qr .box{width:100%;aspect-ratio:1;border-radius:4px;display:grid;place-items:center;font-size:11.5px;color:#6f7a8f;letter-spacing:.2em;
+ background:repeating-conic-gradient(rgba(216,180,90,.16) 0 25%,transparent 0 50%) 0 0/16px 16px}
+.qr p{margin-top:10px;font-size:12.5px;color:var(--text);letter-spacing:.15em}
+.qr small{color:#9aa3b5;font-size:10.5px}
+.foot{margin-top:40px;font-size:11.5px;color:#6f7a8f;letter-spacing:.25em;opacity:0;animation:in 1s 1.5s forwards}
+@keyframes in{from{opacity:0;transform:translateY(22px);filter:blur(5px)}to{opacity:1;transform:none;filter:none}}
+</style></head><body>
+<div class="badge">复刻 27 · 出处：<a href="https://www.bilibili.com/video/BV17C41187GD/" target="_blank">国一微课片尾通行结构</a></div>
+<h1>谢<b>观</b></h1>
+<div class="thanks">观 乎 天 文 · 以 察 时 变 —— 敬 请 指 正</div>
+<div class="cards">
+ <div class="qr"><div class="box">二维码占位<br>在线演示</div><p>在线试玩</p><small>正式版替换真码</small></div>
+ <div class="qr"><div class="box">二维码占位<br>仓库</div><p>开源仓库</p><small>Gitee / GitHub</small></div>
+ <div class="qr"><div class="box">二维码占位<br>文档</div><p>作品说明书</p><small>PDF 下载</small></div>
+</div>
+<div class="foot">XX 大学 观星台团队 · 中国大学生计算机设计大赛 · 2026</div>
+</body></html>
