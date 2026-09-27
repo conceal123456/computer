@@ -1,0 +1,48 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>复刻 22 · 古籍引文书页卡</title>
+<style>
+:root{--paper:#f5efe0;--ink:#2b2b2b;--cinnabar:#c0392b}
+*{margin:0;padding:0;box-sizing:border-box}
+body{min-height:100vh;display:grid;place-items:center;background:#d9d0ba;font-family:"Noto Serif SC","STZhongsong","SimSun",serif;padding:40px 4vw}
+.badge{position:fixed;top:14px;right:16px;font-size:12px;color:#fff;background:rgba(43,43,43,.75);padding:6px 12px;border-radius:3px;z-index:9}
+.badge a{color:#f0c987;text-decoration:none}
+.book{position:relative;width:min(680px,94vw);background:var(--paper);padding:54px 58px;
+ box-shadow:0 20px 50px rgba(43,43,43,.35),inset 0 0 80px rgba(160,140,100,.22);
+ border-radius:3px}
+.book::before{content:"";position:absolute;top:0;bottom:0;left:50%;width:2px;background:linear-gradient(180deg,transparent,rgba(43,43,43,.28),transparent)}
+.col{display:flex;justify-content:center;gap:56px}
+.vp{writing-mode:vertical-rl;font-size:21px;line-height:2.15;letter-spacing:.28em;color:var(--ink);height:420px}
+.vp em{font-style:normal;color:var(--cinnabar)}
+.toc{position:absolute;left:34px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:14px}
+.toc i{width:9px;height:9px;border-radius:50%;background:rgba(43,43,43,.25)}
+.toc i.on{background:var(--cinnabar)}
+.src{position:absolute;right:40px;bottom:26px;font-size:12px;color:#8a8271;letter-spacing:.2em}
+.seal{position:absolute;left:40px;bottom:24px;width:52px;height:52px;background:var(--cinnabar);color:#f5efe0;
+ display:grid;place-items:center;font-size:15px;border-radius:4px;transform:rotate(-3deg);opacity:.92}
+.changewrap{margin-top:30px;text-align:center}
+button{background:#2b2b2b;color:var(--paper);border:none;font-family:inherit;font-size:13px;letter-spacing:.3em;
+ padding:10px 26px;border-radius:3px;cursor:pointer}
+</style></head><body>
+<div class="badge">复刻 22 · 出处：<a href="https://reverie365.github.io/poetry-visualization/" target="_blank">砚池云览·诗藏页版式</a> · 引文出自通行本</div>
+<div>
+ <div class="book">
+  <div class="toc"><i class="on"></i><i></i><i></i></div>
+  <div class="col" id="col"></div>
+  <div class="seal">天文<br>之印</div>
+  <div class="src" id="src"></div>
+ </div>
+ <div class="changewrap"><button onclick="next()">翻页 ▸</button></div>
+</div>
+<script>
+const PAGES=[
+ {v:['「北斗七星','在紫微垣南','斗柄东指','天下皆春」'],s:'——《鹖冠子 · 环流》'},
+ {v:['「七月流火','九月授衣」'],s:'——《诗经 · 豳风 · 七月》（火＝心宿二）'},
+ {v:['「人生不相见','动如参与商」'],s:'——杜甫《赠卫八处士》（参商永不同天）'}];
+let i=0;
+function render(){const p=PAGES[i];
+ document.getElementById('col').innerHTML=p.v.map(l=>`<div class="vp">${l.replace(/（.*?）/,'<em>$&</em>')}</div>`).join('');
+ document.getElementById('src').textContent=p.s;
+ document.querySelectorAll('.toc i').forEach((d,k)=>d.classList.toggle('on',k===i));}
+function next(){i=(i+1)%PAGES.length;render();}
+render();
+</script></body></html>
