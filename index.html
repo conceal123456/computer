@@ -1,0 +1,47 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>复刻 07 · 朝代时间轴曲线 + 点击联动</title>
+<style>
+:root{--bg:#070b14;--panel:rgba(17,25,44,.66);--line:rgba(216,180,90,.28);--gold:#d8b45a;--cinnabar:#c8503c;--text:#ece5d3;--dim:#9aa3b5}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:"Noto Serif SC","SimSun",serif;padding:60px 5vw}
+.badge{position:fixed;top:14px;right:16px;font-size:12px;color:var(--gold);background:rgba(11,17,32,.9);border:1px solid var(--line);padding:6px 12px;border-radius:3px}
+.badge a{color:#57b98a;text-decoration:none}
+.wrap{border:1px solid var(--line);border-radius:6px;background:var(--panel);padding:34px 28px;margin-top:20px}
+.curve{position:relative;height:120px}
+.curve svg{width:100%;height:100%}
+.nodes{position:absolute;inset:0}
+.node{position:absolute;transform:translate(-50%,-50%);text-align:center;cursor:pointer}
+.node .dot{width:18px;height:18px;border-radius:50%;border:3px solid var(--cinnabar);background:var(--bg);margin:0 auto;transition:all .25s}
+.node.on .dot{background:var(--gold);box-shadow:0 0 18px var(--gold);width:24px;height:24px}
+.node .tag{margin-top:34px;border:1px solid var(--line);border-radius:4px;padding:6px 18px;font-size:15px;letter-spacing:.2em;transition:all .25s}
+.node.on .tag{background:var(--gold);color:#0b0f1a;font-weight:700;border-color:var(--gold)}
+.lesson{margin-top:30px;border-top:1px dashed rgba(216,180,90,.3);padding-top:18px;font-size:15px;line-height:1.9}
+.lesson b{color:var(--gold)}
+.fade{animation:fin .45s}@keyframes fin{from{opacity:0;transform:translateY(8px)}}
+</style></head><body>
+<div class="badge">复刻 07 · 出处：<a href="https://github.com/3502687683-web/zhuyun-heritage" target="_blank">筑韵千年·朝代时间轴</a></div>
+<h2 style="letter-spacing:.15em">时间轴曲线 + 联动小课堂 <span style="color:var(--gold);font-size:13px">要点：SVG 弧线轨道 + 绝对定位节点 + 点击驱动下方内容，"一屏一故事"</span></h2>
+<div class="wrap">
+ <div class="curve">
+  <svg viewBox="0 0 1000 120" preserveAspectRatio="none"><path d="M0,80 C250,20 750,20 1000,90" fill="none" stroke="url(#g1)" stroke-width="5"/>
+  <defs><linearGradient id="g1" x1="0" x2="1"><stop offset="0" stop-color="#c8503c"/><stop offset=".5" stop-color="#d8b45a"/><stop offset="1" stop-color="#57b98a"/></linearGradient></defs></svg>
+  <div class="nodes" id="nodes"></div>
+ </div>
+ <div class="lesson" id="lesson"></div>
+</div>
+<script>
+const D=[
+ {n:'唐及以前',x:8,l:'佛光寺、南禅寺、赵州桥等早期木构与石拱源流——"以材为祖"的模数制已成熟。'},
+ {n:'宋 / 元',x:36,l:'《营造法式》刊行，厅堂与殿阁分层标准化；元代大量用弯材，减柱造流行。'},
+ {n:'明代',x:64,l:'砖石普及，硬山抬升；故宫三大殿确立官式顶峰，斗拱渐趋装饰化。'},
+ {n:'清代',x:90,l:'《工程做法则例》颁行，斗拱比例缩减，彩画制度定型为和玺、旋子、苏式三类。'}];
+const nodes=document.getElementById('nodes'),lesson=document.getElementById('lesson');
+D.forEach((d,i)=>{const el=document.createElement('div');el.className='node'+(i===0?' on':'');
+ el.style.left=d.x+'%';el.style.top=(75-55*Math.sin(Math.PI*d.x/100)*.9)+'%';
+ el.innerHTML=`<div class="dot"></div><div class="tag">${d.n}</div>`;
+ el.onclick=()=>{document.querySelectorAll('.node').forEach(n=>n.classList.remove('on'));el.classList.add('on');
+  lesson.classList.remove('fade');void lesson.offsetWidth;lesson.classList.add('fade');
+  lesson.innerHTML='<b>'+d.n+'</b>　'+d.l;};
+ nodes.appendChild(el);});
+lesson.classList.add('fade');lesson.innerHTML='<b>'+D[0].n+'</b>　'+D[0].l;
+</script></body></html>
