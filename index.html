@@ -1,0 +1,32 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>复刻 11 · 竖排诗文导航</title>
+<style>
+:root{--bg:#f5efe0;--ink:#2b2b2b;--cinnabar:#c0392b}
+*{margin:0;padding:0;box-sizing:border-box}
+body{height:100vh;background:var(--bg);font-family:"Noto Serif SC","STZhongsong","SimSun",serif;position:relative;overflow:hidden}
+.badge{position:fixed;top:14px;right:16px;font-size:12px;color:#fff;background:rgba(43,43,43,.75);padding:6px 12px;border-radius:3px}
+.badge a{color:#f0c987;text-decoration:none}
+.side{position:fixed;top:0;bottom:0;left:0;width:120px;background:linear-gradient(180deg,#2f2c28,#3d3931);
+ display:flex;flex-direction:column;align-items:center;justify-content:center;gap:38px}
+.side a{writing-mode:vertical-rl;letter-spacing:.55em;color:#cfc6ae;text-decoration:none;font-size:17px;
+ padding:14px 7px;border-left:1px solid rgba(207,198,174,.18);transition:all .3s}
+.side a.on,.side a:hover{color:#f5efe0;background:rgba(192,57,43,.85);border-radius:0 4px 4px 0}
+.brand{position:absolute;top:44px;left:34px;writing-mode:vertical-rl;font-size:30px;font-weight:900;letter-spacing:.4em;color:#2b2b2b}
+.poem{position:absolute;right:8%;top:14%;writing-mode:vertical-rl;font-size:21px;line-height:2.4;letter-spacing:.3em;color:#4a463c;height:70%}
+.poem small{font-size:13px;color:#8a8271;margin-top:18px}
+.seal{position:absolute;right:calc(8% - 70px);top:58%;width:56px;height:56px;background:var(--cinnabar);color:#f5efe0;
+ display:grid;place-items:center;font-size:17px;border-radius:5px;transform:rotate(-4deg)}
+.page{position:absolute;inset:0;display:grid;place-items:center;font-size:15px;color:#8a8271;letter-spacing:.4em}
+</style></head><body>
+<div class="badge">复刻 11 · 出处：<a href="https://reverie365.github.io/poetry-visualization/" target="_blank">砚池云览·竖排版式</a></div>
+<div class="side">
+ <a class="on">卷首</a><a>星宿</a><a>物候</a><a>诗藏</a><a>司天监</a>
+</div>
+<div class="brand">观乎天文</div>
+<div class="page">—— 内容区 ——</div>
+<div class="poem">
+ 天何所沓？十二焉分？<br>日月安属？列星安陈？<br>
+ <small>—— 屈原《天问》节句</small>
+</div>
+<div class="seal">天文<br>之印</div>
+</body></html>
