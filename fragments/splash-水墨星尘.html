@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>观乎天文 · 开场 · 水墨星尘</title>
+<!-- ============================================================
+     观乎天文 · 开场过场片段「水墨星尘」
+     · 独立单文件：零 CDN / 零外部字体 / 零图片，双击即可演示
+     · 全部内容收敛于 <div id="splash-root">，样式一律以
+       #splash-root 或 body.splash-standalone 作前缀，内联进
+       主作品 index.html 时不污染外部样式
+     · 退场（点击按钮 / Esc）后向 window 派发 "splash:done"
+     · 设计 token 与主作品一致：
+       --bg #070b14 · --gold #d8b45a · --cinnabar #c8503c
+       --text #ece5d3 · --dim #9aa3b5
+     ============================================================ -->
+<style>
+/* ---------- 根节点：玄夜墨蓝，顶一抹月辉、底一沉夜气 ---------- */
+#splash-root{
+  position:fixed;inset:0;z-index:9999;overflow:hidden;
+  font-family:"Noto Serif SC","Source Han Serif SC","STZhongsong","STSong","SimSun",serif;
+  color:#ece5d3;text-align:center;user-select:none;
+  transition:opacity 1s ease;
+  background:
+    radial-gradient(1100px 540px at 50% 14%, rgba(91,143,201,.10), transparent 62%),
+    radial-gradient(1500px 760px at 50% 112%, rgba(18,28,52,.65), transparent 62%),
+    linear-gradient(180deg,#05080f 0%,#070b14 44%,#0b1222 80%,#0a101f 100%);
+}
+#splash-root.leave{opacity:0;pointer-events:none}
+#splash-root *,#splash-root *::before,#splash-root *::after{margin:0;padding:0;box-sizing:border-box}
+
+/* ---------- 三层夜山：远山最淡、近山最沉，山脊一线鎏金 ---------- */
+#splash-root .mtn{position:absolute;left:0;bottom:0;display:block;pointer-events:none;z-index:1}
+#splash-root .mtn.far {height:38vh;width:calc(100% + 70px);opacity:.95;
+  animation:sp-drift 30s ease-in-out infinite alternate}
+#splash-root .mtn.mid {height:27vh;width:calc(100% + 70px);
+  animation:sp-drift 20s ease-in-out infinite alternate-reverse}
+#splash-root .mtn.near{height:17vh;width:100%}
+@keyframes sp-drift{from{transform:translateX(0)}to{transform:translateX(-70px)}}
+
+/* ---------- 金尘画布（山之上、雾之下） ---------- */
+#splash-root .dust{position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none}
+
+/* ---------- 底部雾气：一层常驻沉雾 + 一层缓动流霭 ---------- */
+#splash-root .mist{position:absolute;left:0;right:0;bottom:0;height:36%;z-index:3;pointer-events:none;
+  background:linear-gradient(180deg,transparent 0%,rgba(101,130,186,.06) 38%,rgba(9,14,26,.55) 74%,rgba(7,11,20,.92) 100%)}
+#splash-root .haze{position:absolute;left:0;right:0;bottom:20%;height:15%;z-index:3;pointer-events:none;
+  background:linear-gradient(180deg,transparent,rgba(140,168,220,.055),transparent);
+  animation:sp-haze 9s ease-in-out infinite alternate}
+@keyframes sp-haze{from{opacity:.45;transform:translateY(0)}to{opacity:1;transform:translateY(-8px)}}
+
+/* ---------- 中央：书法大题 · 副题 · 朱砂印章 ---------- */
+#splash-root .hero{position:absolute;inset:0;z-index:4;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;padding:0 24px;pointer-events:none}
+#splash-root .hero h1{
+  font-size:clamp(56px,9vw,108px);font-weight:900;letter-spacing:.18em;padding-left:.18em;color:#ece5d3;
+  text-shadow:0 0 42px rgba(216,180,90,.35),0 2px 26px rgba(0,0,0,.6);
+  opacity:0;animation:sp-rise 1s .2s cubic-bezier(.22,1,.36,1) forwards}
+#splash-root .hero h1 em{font-style:normal;color:#d8b45a;text-shadow:0 0 30px rgba(216,180,90,.5)}
+#splash-root .sub{
+  margin-top:24px;font-size:clamp(14px,1.6vw,18px);letter-spacing:.34em;padding-left:.34em;color:#9aa3b5;
+  opacity:0;animation:sp-rise 1s .55s cubic-bezier(.22,1,.36,1) forwards}
+@keyframes sp-rise{from{opacity:0;transform:translateY(26px);filter:blur(6px)}
+                   to{opacity:1;transform:translateY(0);filter:blur(0)}}
+#splash-root .seal{
+  position:relative;margin-top:38px;width:92px;height:92px;background:#c8503c;color:#f5efe0;
+  display:grid;place-items:center;font-size:25px;font-weight:700;line-height:1.3;
+  letter-spacing:.1em;padding-left:.1em;border-radius:8px;
+  box-shadow:0 6px 24px rgba(200,80,60,.45),0 0 0 1px rgba(200,80,60,.35);
+  opacity:0;transform:scale(2.6) rotate(14deg);
+  animation:sp-stamp .5s 1.35s cubic-bezier(.2,1.6,.4,1) forwards}
+#splash-root .seal::after{content:"";position:absolute;inset:5px;border:1px solid rgba(245,239,224,.55);border-radius:5px}
+@keyframes sp-stamp{to{opacity:.96;transform:scale(1) rotate(-4deg)}}
+
+/* ---------- 底部入口按钮 ---------- */
+#splash-root .enter{
+  position:absolute;left:50%;bottom:7vh;z-index:5;transform:translate(-50%,0);
+  background:none;border:1px solid rgba(216,180,90,.42);color:#d8b45a;font-family:inherit;
+  font-size:14px;letter-spacing:.32em;padding:11px 30px 11px calc(30px + .32em);border-radius:3px;cursor:pointer;
+  opacity:0;animation:sp-rise-btn 1s 1.7s cubic-bezier(.22,1,.36,1) forwards;
+  transition:background .3s,box-shadow .3s,border-color .3s}
+#splash-root .enter:hover{background:rgba(216,180,90,.12);border-color:rgba(216,180,90,.8);
+  box-shadow:0 0 22px rgba(216,180,90,.25)}
+#splash-root .enter:focus-visible{outline:1px solid rgba(216,180,90,.7);outline-offset:3px}
+@keyframes sp-rise-btn{from{opacity:0;transform:translate(-50%,26px);filter:blur(4px)}
+                       to{opacity:1;transform:translate(-50%,0);filter:blur(0)}}
+
+/* ---------- 仅独立预览时生效（由脚本按"root 是否独占 body"判定），
+     内联进主作品后 body 另有兄弟节点，以下规则不会命中 ---------- */
+body.splash-standalone{margin:0;height:100vh;overflow:hidden;background:#070b14}
+body.splash-standalone .splash-afterword{
+  position:fixed;left:0;right:0;bottom:16px;z-index:9998;display:none;text-align:center;
+  color:#5f6a80;font-family:"Noto Serif SC","SimSun",serif;font-size:12px;letter-spacing:.22em}
+
+/* ---------- 动画克制：偏好减弱动效时直接呈现完整画面 ---------- */
+@media (prefers-reduced-motion:reduce){
+  #splash-root .mtn.far,#splash-root .mtn.mid,#splash-root .haze{animation:none}
+  #splash-root .hero h1,#splash-root .sub,#splash-root .seal,#splash-root .enter{
+    animation-duration:.01s;animation-delay:0s}
+}
+</style>
+</head>
+<body>
+
+<div id="splash-root">
+  <!-- 金色星尘 canvas（120~200 粒，上升 + 摆动 + 闪烁呼吸） -->
+  <canvas class="dust" id="splash-dust" aria-hidden="true"></canvas>
+
+  <!-- 三层夜山剪影：#1a2438 远 / #131b2c 中 / #0d1524 近，山脊极细金边 -->
+  <svg class="mtn far" viewBox="0 0 1440 320" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,320 L0,180 Q180,96 360,150 T720,128 T1080,168 T1440,128 L1440,320 Z" fill="#1a2438"/>
+    <path d="M0,180 Q180,96 360,150 T720,128 T1080,168 T1440,128"
+          fill="none" stroke="rgba(216,180,90,.25)" stroke-width="1" vector-effect="non-scaling-stroke"/>
+  </svg>
+  <svg class="mtn mid" viewBox="0 0 1440 320" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,320 L0,236 Q240,150 480,222 T960,204 T1440,224 L1440,320 Z" fill="#131b2c"/>
+    <path d="M0,236 Q240,150 480,222 T960,204 T1440,224"
+          fill="none" stroke="rgba(216,180,90,.25)" stroke-width="1" vector-effect="non-scaling-stroke"/>
+  </svg>
+  <svg class="mtn near" viewBox="0 0 1440 320" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,320 L0,282 Q300,208 560,264 T1040,254 T1440,276 L1440,320 Z" fill="#0d1524"/>
+    <path d="M0,282 Q300,208 560,264 T1040,254 T1440,276"
+          fill="none" stroke="rgba(216,180,90,.22)" stroke-width="1" vector-effect="non-scaling-stroke"/>
+  </svg>
+
+  <div class="haze" aria-hidden="true"></div>
+  <div class="mist" aria-hidden="true"></div>
+
+  <div class="hero">
+    <h1>观乎<em>天文</em></h1>
+    <p class="sub">从二十八宿到中国空间站的千年对话</p>
+    <div class="seal" aria-label="朱砂印章：敬授人时">敬授<br>人时</div>
+  </div>
+
+  <button class="enter" id="splash-enter" type="button">进 入 观 星 台</button>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var root = document.getElementById('splash-root');
+  var btn  = document.getElementById('splash-enter');
+
+  /* ---- 独立预览判定：#splash-root 独占 body（script 除外）才接管 body；
+          内联进主作品后 body 有 nav/section 等兄弟节点，不会命中 ---- */
+  var standalone = (function(){
+    var kids = document.body.children;
+    for (var i = 0; i < kids.length; i++){
+      var k = kids[i];
+      if (k !== root && k.tagName !== 'SCRIPT' && k.tagName !== 'STYLE') return false;
+    }
+    return true;
+  })();
+  if (standalone) document.body.className += ' splash-standalone';
+
+  /* ---------- 金色星尘：缓慢上升 + 左右摆动 + 闪烁，透明度呼吸 ----------
+     数量自适应：clamp(屏宽/9, 120, 200) —— 1080px 屏 120 粒，1440px 160 粒，
+     1920px 及以上封顶 200 粒，始终落在 120~200 区间。
+     光晕用预渲染精灵 drawImage，避免逐帧 shadowBlur 的性能开销。 */
+  var cv = document.getElementById('splash-dust'), ctx = cv.getContext('2d');
+  var W = 0, H = 0, P = [], raf = 0, reduced = false;
+  try { reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch(e){}
+
+  var sprite = document.createElement('canvas');
+  sprite.width = sprite.height = 32;
+  (function(){
+    var sc = sprite.getContext('2d');
+    var g = sc.createRadialGradient(16,16,0,16,16,16);
+    g.addColorStop(0,   'rgba(240,216,150,1)');   /* 暖金亮核 */
+    g.addColorStop(.32, 'rgba(216,180,90,.6)');   /* 鎏金晕 */
+    g.addColorStop(1,   'rgba(216,180,90,0)');    /* 化入夜色 */
+    sc.fillStyle = g; sc.fillRect(0,0,32,32);
+  })();
+
+  var rnd = Math.random.bind(Math);
+  function targetCount(){ return Math.max(120, Math.min(200, Math.round(W / 9))); }
+  function newP(init){
+    return { bx:  rnd() * W,                        /* 摆动基准 x */
+             y:   init ? rnd() * H : H + 18 + rnd() * 40,
+             r:   .7 + rnd() * 1.7,                 /* 尘核半径 */
+             vy:  .12 + rnd() * .34,                /* 上升速度（慢） */
+             amp: 12 + rnd() * 36,                  /* 左右摆幅 */
+             spd: 1500 + rnd() * 2600,              /* 摆动周期 */
+             ph:  rnd() * 6.283,
+             tw:  900 + rnd() * 1700,               /* 闪烁周期 */
+             ph2: rnd() * 6.283,
+             o:   .35 + rnd() * .55 };              /* 基础透明度 */
+  }
+  function seed(){
+    var n = targetCount();
+    while (P.length < n) P.push(newP(true));
+    if (P.length > n) P.length = n;
+  }
+  function size(){
+    W = root.clientWidth; H = root.clientHeight;
+    var d = Math.min(window.devicePixelRatio || 1, 2);
+    cv.width = Math.round(W * d); cv.height = Math.round(H * d);
+    ctx.setTransform(d, 0, 0, d, 0, 0);
+    seed();
+  }
+  function draw(t){
+    ctx.clearRect(0, 0, W, H);
+    for (var i = 0; i < P.length; i++){
+      var p = P[i];
+      p.y -= p.vy;                                  /* 缓慢上升 */
+      if (p.y < -24) P[i] = newP(false);            /* 升出屏顶则从雾底重生 */
+      var x = p.bx + Math.sin(t / p.spd + p.ph) * p.amp;      /* 左右摆动 */
+      var a = p.o * (.55 + .45 * Math.sin(t / p.tw + p.ph2)); /* 透明度呼吸 */
+      var s = p.r * 7;
+      ctx.globalAlpha = Math.max(0, Math.min(1, a));
+      ctx.drawImage(sprite, x - s / 2, p.y - s / 2, s, s);
+    }
+    ctx.globalAlpha = 1;
+  }
+  function loop(t){ draw(t); raf = requestAnimationFrame(loop); }
+
+  size();
+  window.addEventListener('resize', size);
+  if (reduced) { draw(0); } else { raf = requestAnimationFrame(loop); }
+
+  /* ---------- 退场：点击按钮 / Esc → 淡出 1s → display:none → splash:done ---------- */
+  var done = false;
+  function leave(){
+    if (done) return; done = true;                  /* 幂等：连点 / Esc 同按只退一次 */
+    root.classList.add('leave');
+    if (raf) { cancelAnimationFrame(raf); raf = 0; }/* 淡出期间停帧，静默退场 */
+    window.setTimeout(function(){
+      root.style.display = 'none';
+      try {
+        window.dispatchEvent(new CustomEvent('splash:done'));
+      } catch(e) {
+        var ev = document.createEvent('CustomEvent');
+        ev.initCustomEvent('splash:done', false, false, null);
+        window.dispatchEvent(ev);
+      }
+      window.removeEventListener('keydown', onKey);
+      if (standalone) {                             /* 仅独立预览：给一句收场提示 */
+        var hint = document.createElement('div');
+        hint.className = 'splash-afterword';
+        hint.style.display = 'block';
+        hint.textContent = '开场片段演示完毕 · 本段将整体内联进主作品 index.html';
+        document.body.appendChild(hint);
+      }
+    }, 1000);
+  }
+  function onKey(e){ if (e.key === 'Escape' || e.keyCode === 27) leave(); }
+  btn.addEventListener('click', leave);
+  window.addEventListener('keydown', onKey);
+})();
+</script>
+</body>
+</html>
