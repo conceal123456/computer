@@ -1,0 +1,39 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>复刻 19 · 全屏古画背景 + 毛玻璃登录卡</title>
+<style>
+:root{--text:#ece5d3;--gold:#d8b45a;--cinnabar:#c8503c}
+*{margin:0;padding:0;box-sizing:border-box}
+body{height:100vh;font-family:"Noto Serif SC","STZhongsong","SimSun",serif;position:relative;overflow:hidden;
+ /* 正式版：换成 Wikimedia 公有领域《洛神赋图》扫描件 background:url(...) center/cover */
+ background:linear-gradient(160deg,#5a4a32 0%,#8a6f4a 30%,#a8874f 55%,#6a5238 100%)}
+.badge{position:fixed;top:14px;right:16px;font-size:12px;color:var(--text);background:rgba(20,15,8,.8);border:1px solid rgba(216,180,90,.35);padding:6px 12px;border-radius:3px;z-index:9}
+.badge a{color:#57b98a;text-decoration:none}
+/* 古画肌理：多层径向渐变晕染 + 颗粒 */
+body::before{content:"";position:absolute;inset:0;background:
+ radial-gradient(600px 300px at 20% 30%,rgba(236,220,180,.18),transparent 60%),
+ radial-gradient(800px 400px at 80% 70%,rgba(60,40,20,.35),transparent 60%),
+ repeating-conic-gradient(rgba(0,0,0,.02) 0 .2deg,transparent .2deg .5deg)}
+.card{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(400px,88vw);
+ background:rgba(245,239,224,.14);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+ border:1px solid rgba(245,239,224,.3);border-radius:10px;padding:38px 34px;text-align:center;
+ box-shadow:0 24px 60px rgba(0,0,0,.35)}
+.card h2{color:#fdf8ea;font-size:24px;letter-spacing:.4em;margin-bottom:6px;text-shadow:0 1px 8px rgba(0,0,0,.4)}
+.card .s{color:rgba(253,248,234,.8);font-size:12.5px;letter-spacing:.2em;margin-bottom:26px}
+.inp{display:flex;align-items:center;gap:10px;background:rgba(253,248,234,.92);border-radius:24px;margin:14px 0;padding:13px 20px}
+.inp span{font-size:15px;color:#a8874f}
+.inp input{border:none;outline:none;background:none;flex:1;font-size:14.5px;color:#4a3b28;font-family:inherit}
+.btn{margin-top:22px;width:100%;border:none;border-radius:26px;padding:13px;background:var(--cinnabar);
+ color:#fdf8ea;font-family:inherit;font-size:16px;letter-spacing:.5em;text-indent:.5em;cursor:pointer;box-shadow:0 8px 22px rgba(200,80,60,.4);transition:transform .25s}
+.btn:hover{transform:translateY(-2px)}
+.reg{margin-top:16px;font-size:12.5px;color:rgba(253,248,234,.85);letter-spacing:.2em}
+</style></head><body>
+<div class="badge">复刻 19 · 出处：<a href="https://github.com/qianyu0415/arnc" target="_blank">古韵新章·国一登录页（洛神赋图背景）</a> · 此处用渐变晕染代替公有领域古画</div>
+<div class="card">
+ <h2>欢 迎 !</h2>
+ <div class="s">—— 观乎天文 · 观星台入内 ——</div>
+ <div class="inp"><span>✉</span><input placeholder="邮箱"></div>
+ <div class="inp"><span>⚿</span><input type="password" placeholder="密码"></div>
+ <button class="btn">登 录</button>
+ <div class="reg">创建账号 · 游客观星</div>
+</div>
+</body></html>
