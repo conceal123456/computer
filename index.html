@@ -1,0 +1,41 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>复刻 26 · 技术亮点字幕条</title>
+<style>
+:root{--bg:#070b14;--gold:#d8b45a;--text:#ece5d3}
+*{margin:0;padding:0;box-sizing:border-box}
+body{height:100vh;overflow:hidden;background:linear-gradient(160deg,#131a2c,#070b14);font-family:"Noto Serif SC","SimSun",serif}
+.badge{position:fixed;top:14px;right:16px;font-size:12px;color:var(--gold);background:rgba(11,17,32,.9);border:1px solid rgba(216,180,90,.28);padding:6px 12px;border-radius:3px;z-index:9}
+.badge a{color:#57b98a;text-decoration:none}
+.scene{position:fixed;inset:0;display:grid;place-items:center;color:#5f6b84;letter-spacing:.4em;font-size:15px}
+.sub{position:fixed;left:50%;bottom:8vh;transform:translateX(-50%);z-index:2;text-align:center;pointer-events:none}
+.line{display:flex;align-items:center;gap:14px;justify-content:center}
+.tick{width:34px;height:2px;background:var(--gold);transform:scaleX(0)}
+.txt{font-size:clamp(20px,2.6vw,30px);font-weight:700;letter-spacing:.18em;color:var(--text);
+ text-shadow:0 2px 12px rgba(0,0,0,.8);white-space:nowrap}
+.txt b{color:var(--gold)}
+.en{margin-top:8px;font-size:11px;letter-spacing:.4em;color:#9aa3b5;text-transform:uppercase}
+.play .tick{animation:tick .5s .1s forwards cubic-bezier(.2,1,.4,1)}
+.play .txt{animation:fin .55s .25s forwards}
+.play .en{animation:fin .55s .45s forwards}
+.txt,.en{opacity:0;transform:translateY(14px)}
+@keyframes fin{to{opacity:1;transform:none}}
+@keyframes tick{to{transform:scaleX(1)}}
+.hint{position:fixed;bottom:3vh;width:100%;text-align:center;font-size:12px;color:#6f7a8f;letter-spacing:.3em}
+</style></head><body>
+<div class="badge">复刻 26 · 出处：<a href="https://www.bilibili.com/video/BV1fY4y1K7Gs/" target="_blank">国一演示视频通行字幕样式</a></div>
+<div class="scene">—— 这里是系统演示画面 ——</div>
+<div class="sub play" id="sub">
+ <div class="line"><i class="tick"></i><div class="txt">WebGL 实时渲染 · <b>60 FPS</b> 天球</div><i class="tick"></i></div>
+ <div class="en">WEBGL REALTIME CELESTIAL RENDERING</div>
+</div>
+<div class="hint">点击任意处 · 切换下一条字幕</div>
+<script>
+const L=[['WebGL 实时渲染 · <b>60 FPS</b> 天球','WEBGL REALTIME CELESTIAL RENDERING'],
+ ['<b>28 宿</b>坐标来自 HYG 星表逐条校准','HYG CATALOG CALIBRATED COORDINATES'],
+ ['离线可演示 · <b>零</b>网络依赖','FULLY OFFLINE CAPABLE']];
+let i=0;
+document.body.onclick=()=>{i=(i+1)%L.length;const s=document.getElementById('sub');
+ s.classList.remove('play');void s.offsetWidth;
+ s.querySelector('.txt').innerHTML=L[i][0];s.querySelector('.en').textContent=L[i][1];
+ s.classList.add('play');};
+</script></body></html>
