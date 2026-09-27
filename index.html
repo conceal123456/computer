@@ -1,0 +1,46 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>复刻 14 · 3D 自转星球与光环</title>
+<style>
+:root{--bg:#070b14;--gold:#d8b45a;--text:#ece5d3}
+*{margin:0;padding:0}
+body{margin:0;height:100vh;overflow:hidden;background:radial-gradient(900px 500px at 50% 10%,rgba(91,143,201,.12),transparent 60%),var(--bg);font-family:"Noto Serif SC","SimSun",serif}
+.badge{position:fixed;top:14px;right:16px;font-size:12px;color:var(--gold);background:rgba(11,17,32,.9);border:1px solid rgba(216,180,90,.28);padding:6px 12px;border-radius:3px;z-index:9}
+.badge a{color:#57b98a;text-decoration:none}
+#box{position:fixed;inset:0}
+.t{position:fixed;top:44px;width:100%;text-align:center;font-size:26px;letter-spacing:.4em;color:var(--text);z-index:2;pointer-events:none}
+.s{position:fixed;top:92px;width:100%;text-align:center;font-size:12.5px;color:#9aa3b5;letter-spacing:.25em;z-index:2;pointer-events:none}
+</style></head><body>
+<div class="badge">复刻 14 · 出处：<a href="https://github.com/3502687683-web/zhuyun-heritage" target="_blank">筑韵千年 three.min.js 用法</a> · 库为 MIT</div>
+<div class="t">荧 惑 · 火 星 仪</div><div class="s">three.js 基础：球体 + 光环 + 自转 + 星空背景（拖拽查看）</div>
+<div id="box"></div>
+<script src="three.min.js"></script>
+<script src="OrbitControls.js"></script>
+<script>
+const W=innerWidth,H=innerHeight;
+const r=new THREE.WebGLRenderer({antialias:true,alpha:true});r.setSize(W,H);document.getElementById('box').appendChild(r.domElement);
+const s=new THREE.Scene(),cam=new THREE.PerspectiveCamera(45,W/H,.1,100);cam.position.set(0,3.2,11);
+const controls=new THREE.OrbitControls(cam,r.domElement);controls.autoRotate=true;controls.autoRotateSpeed=.9;controls.enableDamping=true;
+// 星球：渐变材质（贴图换成本地 canvas 渐变，避免版权）
+const cv=document.createElement('canvas');cv.width=512;cv.height=256;const g2=cv.getContext('2d');
+const gd=g2.createLinearGradient(0,0,0,256);gd.addColorStop(0,'#8a5a3a');gd.addColorStop(.5,'#c8503c');gd.addColorStop(1,'#5a2e22');
+g2.fillStyle=gd;g2.fillRect(0,0,512,256);
+for(let i=0;i<70;i++){g2.fillStyle='rgba(0,0,0,'+(Math.random()*.16)+')';g2.beginPath();
+ g2.ellipse(Math.random()*512,Math.random()*256,8+Math.random()*36,4+Math.random()*10,Math.random()*3,0,6.3);g2.fill();}
+const tex=new THREE.CanvasTexture(cv);
+const planet=new THREE.Mesh(new THREE.SphereGeometry(3,48,48),new THREE.MeshStandardMaterial({map:tex,roughness:.9}));
+s.add(planet);
+// 光环
+const ring=new THREE.Mesh(new THREE.RingGeometry(4.1,5.6,64),
+ new THREE.MeshBasicMaterial({color:0xd8b45a,side:THREE.DoubleSide,transparent:true,opacity:.45}));
+ring.rotation.x=Math.PI/2.25;s.add(ring);
+// 光
+s.add(new THREE.AmbientLight(0x8fa3c7,.7));
+const d=new THREE.DirectionalLight(0xfff2d8,1.1);d.position.set(5,4,6);s.add(d);
+// 背景星
+const arr=new Float32Array(500*3);for(let i=0;i<500;i++){const v=new THREE.Vector3().randomDirection().multiplyScalar(40);
+ arr[i*3]=v.x;arr[i*3+1]=v.y;arr[i*3+2]=v.z;}
+const bg=new THREE.BufferGeometry();bg.setAttribute('position',new THREE.BufferAttribute(arr,3));
+s.add(new THREE.Points(bg,new THREE.PointsMaterial({color:0xb4c3dc,size:.06})));
+addEventListener('resize',()=>{r.setSize(innerWidth,innerHeight);cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();});
+(function f(){planet.rotation.y+=.003;controls.update();r.render(s,cam);requestAnimationFrame(f)})();
+</script></body></html>
