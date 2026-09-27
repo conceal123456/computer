@@ -1,0 +1,30 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>复刻 05 · ECharts 极坐标柱图</title>
+<style>
+:root{--bg:#070b14;--panel:rgba(17,25,44,.66);--line:rgba(216,180,90,.28);--text:#ece5d3}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:"Noto Serif SC","SimSun",serif;padding:60px 5vw}
+.badge{position:fixed;top:14px;right:16px;font-size:12px;color:var(--gold);background:rgba(11,17,32,.9);border:1px solid var(--line);padding:6px 12px;border-radius:3px}
+.badge a{color:#57b98a;text-decoration:none}
+.card{border:1px solid var(--line);border-radius:6px;background:var(--panel);padding:18px;margin-top:20px}
+#chart{width:100%;height:520px}
+.cap{font-size:13px;color:#9aa3b5;margin-top:8px}
+</style></head><body>
+<div class="badge">复刻 05 · 出处：<a href="https://github.com/3502687683-web/zhuyun-heritage" target="_blank">筑韵千年·气候区影响极坐标柱图</a> · 数据为示意</div>
+<h2 style="letter-spacing:.15em">ECharts 极坐标柱图 <span style="color:var(--gold);font-size:13px">要点：polar + angleAxis 起始偏移 + 分组图例，环形玫瑰的严谨版</span></h2>
+<div class="card"><div id="chart"></div><div class="cap">示意：不同气候区样本量 × 平均保存完好度评分</div></div>
+<script src="echarts.min.js"></script>
+<script>
+const regions=['高山寒冷区','温带半干湿区','亚热湿润区','高原区','海岛区','盆地竹林区'];
+echarts.init(document.getElementById('chart')).setOption({backgroundColor:'transparent',
+ tooltip:{backgroundColor:'rgba(11,17,32,.94)',borderColor:'rgba(216,180,90,.4)',textStyle:{color:'#ece5d3'}},
+ polar:{radius:['18%','78%'],center:['50%','52%']},
+ angleAxis:{type:'category',data:regions,startAngle:90,axisLine:{lineStyle:{color:'rgba(154,163,181,.45)'}},axisLabel:{color:'#9aa3b5',fontFamily:'serif'}},
+ radiusAxis:{axisLine:{show:false},axisLabel:{color:'#9aa3b5'},splitLine:{lineStyle:{color:'rgba(154,163,181,.14)'}}},
+ legend:{textStyle:{color:'#9aa3b5'},top:6},
+ series:[
+  {type:'bar',polarIndex:0,coordinateSystem:'polar',name:'样本量(百处·示意)',data:[36,58,72,24,12,41],
+   itemStyle:{color:'#d8b45a',borderRadius:4},stack:'a'},
+  {type:'bar',polarIndex:0,coordinateSystem:'polar',name:'完好度(分·示意)',data:[62,74,55,81,66,70],
+   itemStyle:{color:'#c8503c',borderRadius:4},stack:'a'}]});
+</script></body></html>
