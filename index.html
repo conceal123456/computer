@@ -1,0 +1,46 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>复刻 34 · 桑基图·命名源流</title>
+<style>
+:root{--bg:#070b14;--text:#ece5d3}
+*{margin:0;padding:0;box-sizing:border-box}
+body{height:100vh;overflow:hidden;background:var(--bg);font-family:"Noto Serif SC","SimSun",serif}
+.badge{position:fixed;top:14px;right:16px;font-size:12px;color:var(--gold);background:rgba(11,17,32,.9);border:1px solid rgba(216,180,90,.28);padding:6px 12px;border-radius:3px;z-index:9}
+.badge a{color:#57b98a;text-decoration:none}
+#chart{position:fixed;inset:0}
+h1{position:fixed;top:26px;left:5vw;font-size:22px;letter-spacing:.2em;color:var(--text);z-index:2;pointer-events:none}
+</style></head><body>
+<div class="badge">进阶 34 · 类型：桑基图（Sankey）· 数据为示意结构</div>
+<h1>命 名 源 流 · 桑 基 图</h1>
+<div id="chart"></div>
+<script src="echarts.min.js"></script>
+<script>
+/* 要点：sankey 桑基图讲"从哪来 → 经什么 → 到哪去"的流量故事，
+   桑基的宽度即权重。左侧文化源头 → 中间领域 → 右侧工程。 */
+echarts.init(document.getElementById('chart')).setOption({
+ backgroundColor:'transparent',
+ tooltip:{backgroundColor:'rgba(11,17,32,.94)',borderColor:'rgba(216,180,90,.4)',textStyle:{color:'#ece5d3'}},
+ series:[{type:'sankey',left:60,right:120,top:60,bottom:40,
+  emphasis:{focus:'adjacency'},
+  nodeAlign:'justify',draggable:true,
+  data:[
+   {name:'星官',itemStyle:{color:'#d8b45a'}},{name:'神话',itemStyle:{color:'#c8503c'}},{name:'典籍',itemStyle:{color:'#4a7fb5'}},
+   {name:'导航',itemStyle:{color:'#9c8549'}},{name:'探月',itemStyle:{color:'#9c8549'}},{name:'探火',itemStyle:{color:'#9c8549'}},
+   {name:'探日',itemStyle:{color:'#9c8549'}},{name:'基础科学',itemStyle:{color:'#9c8549'}},
+   {name:'北斗',itemStyle:{color:'#57b98a'}},{name:'嫦娥·玉兔',itemStyle:{color:'#57b98a'}},
+   {name:'天问·祝融',itemStyle:{color:'#57b98a'}},{name:'羲和·夸父',itemStyle:{color:'#57b98a'}},
+   {name:'悟空·墨子',itemStyle:{color:'#57b98a'}},{name:'鹊桥',itemStyle:{color:'#57b98a'}},{name:'天宫',itemStyle:{color:'#57b98a'}}],
+  links:[
+   {source:'星官',target:'导航',value:3},{source:'星官',target:'探月',value:1},{source:'星官',target:'天宫',value:1},
+   {source:'神话',target:'探月',value:2},{source:'神话',target:'探火',value:2},{source:'神话',target:'探日',value:2},
+   {source:'神话',target:'基础科学',value:2},
+   {source:'典籍',target:'探火',value:1},{source:'典籍',target:'基础科学',value:3},{source:'典籍',target:'探月',value:1},
+   {source:'导航',target:'北斗',value:3},
+   {source:'探月',target:'嫦娥·玉兔',value:2},{source:'探月',target:'鹊桥',value:1},
+   {source:'探火',target:'天问·祝融',value:2},{source:'探火',target:'萤火',value:1},
+   {source:'探日',target:'羲和·夸父',value:2},
+   {source:'基础科学',target:'悟空·墨子',value:2},
+   {source:'天宫',target:'天宫',value:1}],
+  lineStyle:{color:'gradient',opacity:.35,curveness:.5},
+  itemStyle:{borderWidth:0,borderRadius:3},
+  label:{color:'#ece5d3',fontFamily:'serif',fontSize:13}}]});
+</script></body></html>
