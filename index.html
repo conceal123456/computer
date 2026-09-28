@@ -154,12 +154,14 @@ section{max-width:1280px;margin:0 auto;padding:110px 32px 40px}
 .ai-side .kv b{color:var(--text)}
 /* ---------- 数说巡天（图表） ---------- */
 .data-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:20px;margin-top:40px}
+.data-grid>.chart-card{min-width:0;overflow:hidden}
 .chart-card{border:1px solid var(--line);border-radius:6px;background:var(--panel);padding:18px}
 .chart-card .c-t{display:flex;align-items:center;gap:12px;margin-bottom:8px}
 .chart-card .c-t b{font-size:16.5px;letter-spacing:.1em;color:var(--text)}
 .chart-card .c-t .pill{font-size:11px;letter-spacing:.15em;color:var(--qing);border:1px solid rgba(87,185,138,.45);padding:2px 9px;border-radius:2px}
 .chart-card .c-t .src{margin-left:auto;font-size:11.5px;color:var(--gold-dim);letter-spacing:.08em}
-.chart{width:100%;height:390px}
+.chart{width:100%;height:390px;min-width:0}
+.chart canvas{width:100% !important;max-width:100%;display:block}
 .data-note{margin-top:14px;font-size:12.5px;color:var(--dim)}
 .data-note b{color:var(--gold-dim)}
 @media (max-width:960px){.data-grid{grid-template-columns:1fr}}
@@ -932,6 +934,10 @@ if(STATIC)document.documentElement.classList.add('static');
       emphasis:{itemStyle:{shadowBlur:16,shadowColor:'rgba(216,180,90,.5)'}},
       levels:[{},{r0:16,r:56,label:{fontSize:14,fontWeight:700}},{r0:56,r:92,label:{fontSize:11}}]}]
   });
+  /* 窗口尺寸变化时图表自适应（否则画布固定宽度会造成窄屏横向溢出） */
+  var _chs=['chartLaunch','chartLineage'].map(function(id){ return echarts.getInstanceByDom(document.getElementById(id)); });
+  var _rt=null;
+  window.addEventListener('resize', function(){ clearTimeout(_rt); _rt=setTimeout(function(){ _chs.forEach(function(c){ if(c) c.resize(); }); }, 150); });
 })();
 
 /* ================= 滚动渐入 + 数字滚动 ================= */
@@ -1148,8 +1154,9 @@ addEventListener('click',function(){ if(window.__introGuard) return;
 <script>
 /* ===== 集成：片头编排（开场→苍龙转场→星图）+ 跳过按钮 ===== */
 (function(){
-  var dragonBox=null, tpl=document.getElementById('tpl-dragon'), skip=null, done=false;
+  var dragonBox=null, tpl=document.getElementById('tpl-dragon'), skip=null, done=false, fh=null;
   function hideSkip(){ if(skip){skip.remove();skip=null;} }
+  function hideDragonNow(){ if(dragonBox) dragonBox.style.display='none'; lock(false); hideSkip(); if(fh) clearTimeout(fh); }
   function showDragon(){
     if(done||!tpl) return; done=true; window.__introGuard=true;
     document.body.classList.remove('splash-standalone');
@@ -1157,13 +1164,17 @@ addEventListener('click',function(){ if(window.__introGuard) return;
     dragonBox.innerHTML=tpl.innerHTML; document.body.appendChild(dragonBox);
     var old=document.getElementById('dragon-root');
     if(old) old.style.display='';
+    /* 时钟兜底：即使 rAF 被标签页挂起，片头也必然在 12s 内收场 */
+    fh=setTimeout(function(){ hideDragonNow(); }, 12000);
+    /* 点击转场任意位置 = 立即跳过（集成模式） */
+    dragonBox.addEventListener('click', function(){ hideDragonNow(); }, true);
     try{
       var s=document.createElement('script'); s.textContent=(dragonBox.querySelector('script')||{}).textContent||'';
       if(s.textContent){ var rm=dragonBox.querySelector('script'); if(rm) rm.remove(); document.body.appendChild(s); }
-    }catch(e){ dragonBox.style.display='none'; hideSkip(); }
+    }catch(e){ hideDragonNow(); }
   }
   window.addEventListener('splash:done', showDragon);
-  window.addEventListener('dragon:done', function(){ setTimeout(function(){ if(dragonBox) dragonBox.style.display='none'; }, 1600); hideSkip(); });
+  window.addEventListener('dragon:done', function(){ setTimeout(hideDragonNow, 800); });
   function makeSkip(){ skip=document.createElement('button'); skip.textContent='跳过片头 »';
     skip.style.cssText='position:fixed;right:16px;bottom:14px;z-index:10001;background:rgba(11,17,32,.85);color:#d8b45a;border:1px solid rgba(216,180,90,.4);padding:8px 16px;border-radius:20px;font-family:inherit;font-size:12.5px;letter-spacing:.2em;cursor:pointer';
     skip.onclick=function(){ var sp=document.getElementById('splash-root'); if(sp) sp.style.display='none';
