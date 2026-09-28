@@ -1,0 +1,57 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>复刻 33 · 力导向知识图谱</title>
+<style>
+:root{--bg:#070b14;--gold:#d8b45a;--text:#ece5d3}
+*{margin:0;padding:0;box-sizing:border-box}
+body{height:100vh;overflow:hidden;background:var(--bg);font-family:"Noto Serif SC","SimSun",serif}
+.badge{position:fixed;top:14px;right:16px;font-size:12px;color:var(--gold);background:rgba(11,17,32,.9);border:1px solid rgba(216,180,90,.28);padding:6px 12px;border-radius:3px;z-index:9}
+.badge a{color:#57b98a;text-decoration:none}
+#chart{position:fixed;inset:0}
+h1{position:fixed;top:26px;left:5vw;font-size:22px;letter-spacing:.2em;color:var(--text);z-index:2;pointer-events:none}
+</style></head><body>
+<div class="badge">进阶 33 · 类型：力导向知识图谱（ECharts graph）</div>
+<h1>星 官 · 命 名 · 知 识 图 谱</h1>
+<div id="chart"></div>
+<script src="echarts.min.js"></script>
+<script>
+/* 要点：force 布局 + categories 分组配色 + 边的 curveness；
+   "命名源流"这张图可以直接接进主作品的古名今用章节。 */
+var CATS=[{name:'核心'},{name:'星官体系'},{name:'神话人物'},{name:'典籍意象'},{name:'航天工程'}];
+var COL=['#d8b45a','#b3924a','#c8503c','#4a7fb5','#57b98a'];
+var nodes=[
+ {name:'观乎天文',category:0,symbolSize:74},
+ {name:'星官体系',category:1,symbolSize:46},{name:'神话人物',category:2,symbolSize:46},
+ {name:'典籍意象',category:3,symbolSize:46},{name:'航天工程',category:4,symbolSize:46},
+ {name:'北斗',category:1,symbolSize:30},{name:'天宫',category:1,symbolSize:30},
+ {name:'嫦娥',category:2,symbolSize:30},{name:'玉兔',category:2,symbolSize:26},
+ {name:'祝融',category:2,symbolSize:26},{name:'羲和',category:2,symbolSize:26},
+ {name:'夸父',category:2,symbolSize:26},{name:'悟空',category:2,symbolSize:26},
+ {name:'天问',category:3,symbolSize:30},{name:'墨子',category:3,symbolSize:26},
+ {name:'鹊桥',category:3,symbolSize:26},{name:'萤火',category:3,symbolSize:22},
+ {name:'北斗导航',category:4,symbolSize:30},{name:'空间站',category:4,symbolSize:30},
+ {name:'探月工程',category:4,symbolSize:30},{name:'火星探测',category:4,symbolSize:28},
+ {name:'太阳探测',category:4,symbolSize:26},{name:'暗物质卫星',category:4,symbolSize:24},
+ {name:'量子卫星',category:4,symbolSize:24}];
+var links=[
+ ['观乎天文','星官体系'],['观乎天文','神话人物'],['观乎天文','典籍意象'],['观乎天文','航天工程'],
+ ['星官体系','北斗'],['星官体系','天宫'],['北斗','北斗导航'],['天宫','空间站'],
+ ['神话人物','嫦娥'],['神话人物','玉兔'],['神话人物','祝融'],['神话人物','羲和'],
+ ['神话人物','夸父'],['神话人物','悟空'],['嫦娥','探月工程'],['玉兔','探月工程'],
+ ['祝融','火星探测'],['羲和','太阳探测'],['夸父','太阳探测'],['悟空','暗物质卫星'],
+ ['典籍意象','天问'],['典籍意象','墨子'],['典籍意象','鹊桥'],['典籍意象','萤火'],
+ ['天问','火星探测'],['墨子','量子卫星'],['鹊桥','探月工程'],['萤火','火星探测']
+].map(function(e){return {source:e[0],target:e[1]};});
+echarts.init(document.getElementById('chart')).setOption({
+ backgroundColor:'transparent',
+ tooltip:{backgroundColor:'rgba(11,17,32,.94)',borderColor:'rgba(216,180,90,.4)',textStyle:{color:'#ece5d3'}},
+ legend:{data:CATS.map(function(c){return c.name;}),textStyle:{color:'#9aa3b5'},top:8},
+ series:[{type:'graph',layout:'force',roam:true,draggable:true,
+  data:nodes.map(function(n,i){return {name:n.name,category:n.category,symbolSize:n.symbolSize,
+    itemStyle:{color:COL[n.category]},label:{show:n.symbolSize>24,color:'#ece5d3',fontFamily:'serif'}};}),
+  links:links,
+  categories:CATS,
+  force:{repulsion:260,edgeLength:70,gravity:.08},
+  lineStyle:{color:'rgba(154,163,181,.4)',width:1.2,curveness:.18},
+  emphasis:{focus:'adjacency',lineStyle:{width:2.4,color:'#d8b45a'}},
+  label:{fontFamily:'serif'}}]});
+</script></body></html>
