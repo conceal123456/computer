@@ -1,0 +1,45 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>复刻 38 · 汉字数字雨</title>
+<style>
+:root{--gold:#d8b45a;--text:#ece5d3}
+*{margin:0;padding:0}
+body{height:100vh;overflow:hidden;background:#05070d;font-family:"Noto Serif SC","SimSun",serif}
+.badge{position:fixed;top:14px;right:16px;font-size:12px;color:var(--gold);background:rgba(11,17,32,.9);border:1px solid rgba(216,180,90,.28);padding:6px 12px;border-radius:3px;z-index:9}
+.badge a{color:#57b98a;text-decoration:none}
+#cv{position:fixed;inset:0}
+.t{position:fixed;bottom:10vh;width:100%;text-align:center;font-size:clamp(24px,4vw,42px);font-weight:900;letter-spacing:.4em;color:var(--text);z-index:2;pointer-events:none;text-shadow:0 0 24px rgba(216,180,90,.4)}
+.s{position:fixed;bottom:6vh;width:100%;text-align:center;font-size:12px;color:#8a97ad;letter-spacing:.35em;z-index:2;pointer-events:none}
+</style></head><body>
+<div class="badge">进阶 38 · 类型：字符雨（天文汉字版）</div>
+<canvas id="cv"></canvas>
+<div class="t">天 象 · 垂 天 文</div>
+<div class="s">二 十 八 宿 与 星 官 之 名 · 化 雨 而 下</div>
+<script>
+/* 要点：数字雨 = 按列下落的字符流：每列一个 y 游标，每帧随机写一个字，
+   头部亮、尾部靠半透明黑矩形覆盖衰减。字符池换成二十八宿，主题感立刻不同。 */
+var cv=document.getElementById('cv'),x=cv.getContext('2d');
+var FS=18,COLS=[],CH='角亢氐房心尾箕斗牛女虚危室壁奎娄胃昴毕觜参井鬼柳星张翼轸日月金木水火土斗牛虚危'.split('');
+var W,H;function size(){
+  W=cv.width=innerWidth;H=cv.height=innerHeight;
+  var n=Math.ceil(W/FS);
+  COLS=[];for(var i=0;i<n;i++)COLS.push({y:Math.random()*H,v:2.5+Math.random()*5,hot:Math.random()<.06});
+}
+size();addEventListener('resize',size);
+function frame(){
+  x.fillStyle='rgba(5,7,13,.14)';x.fillRect(0,0,W,H);   // 衰减层
+  x.font=FS+'px "Noto Serif SC","SimSun",serif';
+  for(var i=0;i<COLS.length;i++){var c=COLS[i];
+    var ch=CH[Math.floor(Math.random()*CH.length)];
+    var px=i*FS+2,py=c.y;
+    if(c.hot){x.fillStyle='#f5e6b8';}                  // 金色热列
+    else{x.fillStyle='rgba(216,180,90,.92)';}
+    x.fillText(ch,px,py);
+    x.fillStyle='rgba(236,229,211,.5)';
+    x.fillText(CH[Math.floor(Math.random()*CH.length)],px,py-FS);
+    c.y+=c.v;
+    if(c.y>H+Math.random()*300){c.y=0;c.v=2.5+Math.random()*5;c.hot=Math.random()<.06;}
+  }
+  requestAnimationFrame(frame);
+}
+frame();
+</script></body></html>
