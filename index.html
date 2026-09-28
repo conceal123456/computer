@@ -1,0 +1,60 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>复刻 32 · 条形竞赛图（Bar Chart Race）</title>
+<style>
+:root{--bg:#070b14;--gold:#d8b45a;--text:#ece5d3;--dim:#9aa3b5}
+*{margin:0;padding:0;box-sizing:border-box}
+body{height:100vh;overflow:hidden;background:var(--bg);font-family:"Noto Serif SC","STZhongsong","SimSun",serif}
+.badge{position:fixed;top:14px;right:16px;font-size:12px;color:var(--gold);background:rgba(11,17,32,.9);border:1px solid rgba(216,180,90,.28);padding:6px 12px;border-radius:3px;z-index:9}
+.badge a{color:#57b98a;text-decoration:none}
+h1{position:fixed;top:26px;left:5vw;font-size:22px;letter-spacing:.2em;color:var(--text)}
+#cv{position:fixed;inset:0}
+.year{position:fixed;right:6vw;bottom:8vh;font-family:Georgia,serif;font-size:clamp(60px,10vw,120px);font-weight:900;color:rgba(216,180,90,.16);pointer-events:none}
+</style></head><body>
+<div class="badge">进阶 32 · 类型：条形竞赛图（Bar Chart Race）· 数据为示意</div>
+<h1>历 代 观 星 台 累 计 竞 赛</h1>
+<canvas id="cv"></canvas>
+<div class="year" id="yr">600</div>
+<script>
+/* 要点：条形竞赛图 = 按帧插值 + 每帧重新排序 + 平滑的名次交换。
+   不用任何图表库，纯 canvas 手写。数据为示意（正式版附引用）。 */
+var cv=document.getElementById('cv'),x=cv.getContext('2d');
+var W,H;function size(){W=cv.width=innerWidth;H=cv.height=innerHeight;}size();addEventListener('resize',size);
+var COLORS={'唐':'#c8503c','宋':'#d8b45a','元':'#57b98a','明':'#5b8fc9','清':'#9c8549'};
+var DATA={};   // 年份 -> {朝代: 累计观星台数(示意)}
+var YEARS=[600,750,960,1120,1270,1368,1500,1644,1750,1840,1911];
+[['唐',[2,14,32,38,44,50,58,66,72,78,82]],
+ ['宋',[1,8,26,48,60,68,74,80,84,88,90]],
+ ['元',[0,4,14,26,40,52,60,66,72,76,80]],
+ ['明',[0,2,8,16,28,44,62,76,86,92,96]],
+ ['清',[0,1,4,8,14,22,36,58,78,94,100]]
+].forEach(function(row){DATA[row[0]]=row[1];});
+var NAMES=Object.keys(DATA),cur={};
+NAMES.forEach(function(n){cur[n]=DATA[n][0];});
+var t0=null,DUR=26000;
+function draw(now){
+  if(t0===null)t0=now;
+  var t=(now-t0)/DUR, yi=Math.min(YEARS.length-1.001, t*(YEARS.length-1));
+  var i0=Math.floor(yi), frac=yi-i0, year=Math.round(YEARS[i0]+(YEARS[i0+1]-YEARS[i0])*frac);
+  // 插值
+  NAMES.forEach(function(n){cur[n]=DATA[n][i0]+(DATA[n][i0+1]-DATA[n][i0])*frac;});
+  // 排序
+  var ranked=NAMES.slice().sort(function(a,b){return cur[b]-cur[a];});
+  x.clearRect(0,0,W,H);
+  var bh=Math.min(46,H/14), gap=bh*.55, x0=W*.30, maxW=W-x0-140;
+  var max=Math.max.apply(null,NAMES.map(function(n){return cur[n];}))||1;
+  ranked.forEach(function(n,i){
+    var y=H*.28+i*(bh+gap), w=maxW*cur[n]/max;
+    x.fillStyle='rgba(255,255,255,.06)';x.fillRect(x0,y,maxW,bh);
+    var g=x.createLinearGradient(x0,0,x0+w,0);
+    g.addColorStop(0,COLORS[n]);g.addColorStop(1,'rgba(216,180,90,.85)');
+    x.fillStyle=g;x.fillRect(x0,y,w,bh);
+    x.fillStyle='#ece5d3';x.font='700 '+(bh*.62)+'px "Noto Serif SC","SimSun",serif';x.textBaseline='middle';
+    x.fillText(n+' · 观星台',x0-14,y+bh/2);x.textAlign='right';
+    x.fillText(Math.round(cur[n]),x0+w+12+((x0+w+70>W)?-0:0),y+bh/2);
+    x.textAlign='left';
+  });
+  document.getElementById('yr').textContent=year;
+  if(t<1)requestAnimationFrame(draw);else{t0=null;requestAnimationFrame(draw);}  // 循环播放
+}
+requestAnimationFrame(draw);
+</script></body></html>
