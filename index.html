@@ -1,0 +1,50 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>复刻 36 · 水墨涟漪交互</title>
+<style>
+:root{--gold:#d8b45a;--text:#ece5d3;--dim:#9aa3b5}
+*{margin:0;padding:0}
+body{height:100vh;overflow:hidden;background:radial-gradient(1000px 520px at 50% 100%,rgba(74,127,181,.16),transparent 62%),#0a0f1c;font-family:"Noto Serif SC","SimSun",serif;cursor:crosshair}
+.badge{position:fixed;top:14px;right:16px;font-size:12px;color:var(--gold);background:rgba(11,17,32,.9);border:1px solid rgba(216,180,90,.28);padding:6px 12px;border-radius:3px;z-index:9}
+.badge a{color:#57b98a;text-decoration:none}
+#cv{position:fixed;inset:0}
+.t{position:fixed;top:20vh;width:100%;text-align:center;font-size:clamp(34px,6vw,66px);font-weight:900;letter-spacing:.3em;color:var(--text);pointer-events:none;z-index:2;text-shadow:0 0 30px rgba(216,180,90,.3)}
+.s{position:fixed;top:calc(20vh + 90px);width:100%;text-align:center;font-size:14px;letter-spacing:.45em;color:var(--dim);pointer-events:none;z-index:2}
+</style></head><body>
+<div class="badge">进阶 36 · 类型：涟漪交互（点击/移动触发）</div>
+<canvas id="cv"></canvas>
+<div class="t">天 池 印 月</div>
+<div class="s">一 石 激 起 千 层 涟 · 移 动 或 点 击 试 试</div>
+<script>
+/* 要点：涟漪 = 每次触发生成多圈延迟扩散的圆环（半径/透明度随生命周期变化），
+   叠加"拖尾"半透明清屏形成水墨质感。低配机也流畅。 */
+var cv=document.getElementById('cv'),x=cv.getContext('2d');
+var W,H;function size(){W=cv.width=innerWidth;H=cv.height=innerHeight;}size();addEventListener('resize',size);
+var RS=[];   // ripples
+function ripple(px,py,big){
+  var n=big?7:4;
+  for(var i=0;i<n;i++)RS.push({x:px,y:py,t:-(i*.16),life:2.2+Math.random(),ink:Math.random()<.25});
+}
+var last=null;
+addEventListener('mousemove',function(e){
+  if(!last||Math.hypot(e.clientX-last[0],e.clientY-last[1])>46){ripple(e.clientX,e.clientY,false);last=[e.clientX,e.clientY];}});
+addEventListener('click',function(e){ripple(e.clientX,e.clientY,true);});
+setInterval(function(){ripple(W*(.2+Math.random()*.6),H*(.35+Math.random()*.5),false);},1800);  // 环境涟漪
+function draw(now){
+  x.fillStyle='rgba(10,15,28,.26)';x.fillRect(0,0,W,H);   // 拖尾清屏
+  // 水中月
+  x.beginPath();x.arc(W/2,H*.72,42,0,6.29);
+  x.fillStyle='rgba(216,180,90,.10)';x.fill();
+  x.strokeStyle='rgba(216,180,90,.30)';x.stroke();
+  for(var i=RS.length-1;i>=0;i--){var r=RS[i];r.t+=.016;
+    if(r.t<0)continue;
+    var k=r.t/r.life;if(k>=1){RS.splice(i,1);continue;}
+    var rad=6+k*(r.ink?150:96), al=(1-k)*(r.ink?.5:.38);
+    x.beginPath();x.arc(r.x,r.y,rad,0,6.29);
+    x.strokeStyle=r.ink?'rgba(200,80,60,'+al+')':'rgba(216,180,90,'+al+')';
+    x.lineWidth=(1-k)*2.4+.4;x.stroke();
+    if(r.ink){x.beginPath();x.arc(r.x,r.y,rad*.62,0,6.29);
+      x.strokeStyle='rgba(200,80,60,'+al*.6+')';x.lineWidth=(1-k)*1.4+.3;x.stroke();}}
+  requestAnimationFrame(draw);
+}
+requestAnimationFrame(draw);
+</script></body></html>
