@@ -1,0 +1,54 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>复刻 39 · 3D 汉字星球</title>
+<style>
+:root{--bg:#070b14;--gold:#d8b45a;--text:#ece5d3}
+*{margin:0;padding:0}
+body{margin:0;height:100vh;overflow:hidden;background:radial-gradient(900px 460px at 50% 0%,rgba(91,143,201,.12),transparent 60%),var(--bg);font-family:"Noto Serif SC","SimSun",serif}
+.badge{position:fixed;top:14px;right:16px;font-size:12px;color:var(--gold);background:rgba(11,17,32,.9);border:1px solid rgba(216,180,90,.28);padding:6px 12px;border-radius:3px;z-index:9}
+.badge a{color:#57b98a;text-decoration:none}
+#box{position:fixed;inset:0}
+.t{position:fixed;top:40px;width:100%;text-align:center;font-size:26px;letter-spacing:.4em;color:var(--text);z-index:2;pointer-events:none}
+.s{position:fixed;top:88px;width:100%;text-align:center;font-size:12.5px;color:#8a97ad;letter-spacing:.3em;z-index:2;pointer-events:none}
+</style></head><body>
+<div class="badge">进阶 39 · 类型：3D 文字星球（three.js Sprite 球面分布）</div>
+<div class="t">周 天 星 官 · 环 列 成 球</div>
+<div class="s">斐波那契球面均匀分布 + canvas 文字贴图 Sprite（拖拽旋转）</div>
+<div id="box"></div>
+<script src="three.min.js"></script>
+<script src="OrbitControls.js"></script>
+<script>
+var box=document.getElementById('box');
+var r=new THREE.WebGLRenderer({antialias:true,alpha:true});r.setPixelRatio(Math.min(devicePixelRatio,2));
+r.setSize(innerWidth,innerHeight);box.appendChild(r.domElement);
+var s=new THREE.Scene(),cam=new THREE.PerspectiveCamera(45,innerWidth/innerHeight,.1,200);cam.position.set(0,0,15);
+var controls=new THREE.OrbitControls(cam,r.domElement);controls.enableDamping=true;controls.autoRotate=true;controls.autoRotateSpeed=.7;
+// 文字 Sprite
+function tag(txt,color,big){
+  var c=document.createElement('canvas');c.width=256;c.height=128;var x=c.getContext('2d');
+  x.font=(big?'700 62px':'600 46px')+' "Noto Serif SC","STZhongsong","SimSun",serif';
+  x.textAlign='center';x.textBaseline='middle';x.fillStyle=color;x.fillText(txt,128,64);
+  var t=new THREE.CanvasTexture(c);t.minFilter=THREE.LinearFilter;
+  var sp=new THREE.Sprite(new THREE.SpriteMaterial({map:t,transparent:true,depthTest:false}));
+  sp.scale.set(big?2.6:1.9,big?1.3:.95,1);return sp;}
+var WORDS=['角','亢','氐','房','心','尾','箕','斗','牛','女','虚','危','室','壁','奎','娄','胃','昴','毕','觜','参','井','鬼','柳','星','张','翼','轸',
+ '北斗','天宫','嫦娥','祝融','羲和','夸父','悟空','墨子','鹊桥','天问','紫微','太微','天市','荧惑','岁星','辰星','镇星','太白'];
+var R=5.6,N=WORDS.length;
+// 斐波那契球面：均匀分布
+for(var i=0;i<N;i++){
+  var y=1-(i/(N-1))*2, rr=Math.sqrt(1-y*y), th=i*2.39996;
+  var name=WORDS[i];
+  var isMans='角亢氐房心尾箕斗牛女虚危室壁奎娄胃昴毕觜参井鬼柳星张翼轸'.indexOf(name)>-1;
+  var sp=tag(name,isMans?'#d8b45a':'#8fb4dd',name.length>1);
+  sp.position.set(Math.cos(th)*rr*R,y*R,Math.sin(th)*rr*R);
+  s.add(sp);
+  // 星点
+  var dot=new THREE.Mesh(new THREE.SphereGeometry(.06,8,8),new THREE.MeshBasicMaterial({color:isMans?0xd8b45a:0x5b8fc9}));
+  dot.position.copy(sp.position).multiplyScalar(.94);s.add(dot);
+}
+// 背景星
+var arr=new Float32Array(400*3);for(var i2=0;i2<400;i2++){var v=new THREE.Vector3().randomDirection().multiplyScalar(30);arr[i2*3]=v.x;arr[i2*3+1]=v.y;arr[i2*3+2]=v.z;}
+var bg=new THREE.BufferGeometry();bg.setAttribute('position',new THREE.BufferAttribute(arr,3));
+s.add(new THREE.Points(bg,new THREE.PointsMaterial({color:0xb4c3dc,size:.05})));
+addEventListener('resize',function(){r.setSize(innerWidth,innerHeight);cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();});
+(function f(){s.rotation.y+=.0011;controls.update();r.render(s,cam);requestAnimationFrame(f);})();
+</script></body></html>
